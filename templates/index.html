@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Дневник | Лицей 130</title>
+    <script
+    src="https://code.jquery.com/jquery-3.7.1.min.js"
+    integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+    crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="/static/css/fonts.css">
+    <link rel="stylesheet" href="/static/css/index.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link
+  rel="stylesheet"
+  href="https://unpkg.com/simplebar@latest/dist/simplebar.css"
+/>
+<script src="https://unpkg.com/simplebar@latest/dist/simplebar.min.js"></script>
+</head>
+<body>
+    <div class="cont">
+        <div class="maincont">
+            <div class="headercont opened" style="opacity: 0;">
+                <div class="header"><a class="usname">User Name</a><a class="openmenu"><i class="fa-solid fa-angle-down"></i></a></div>
+                <a class="lastupd">Обновлено Date Time</a>
+                <div class="menu">
+                    <a class="menuitem" onclick="window.location.replace('/logout')"><i class="fa-solid fa-pen-to-square"></i> Изменить пароль</a>
+                    <a class="menuitem" onclick="window.location.replace('/logout')"><i class="fa-solid fa-arrow-right-from-bracket"></i> Выйти</a>
+                </div>
+            </div>
+            <div class="markscont">
+                <div data-simplebar>
+                    <table>
+                        <tr>
+                            <th>&nbsp;</th>
+                            <th>Date</th>
+                        </tr>
+                        <tr>
+                            <th>Lesson Name</th>
+                            <td>Mark</td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="by">by <a href="https://t.me/btless" target="_blank" rel="noopener noreferrer">@btless</a> & <a href="https://t.me/n1ret" target="_blank" rel="noopener noreferrer">@n1ret</a></div>
+</body>
+<script>
+    document.body.onload=()=>{
+        $(".menu").css("left",Math.max($(".header").width()-$(".menu").width()+5,0)+"px");
+        
+        $(".menu").get(0).style.setProperty("--menu-height", $(".menu").height()+"px");
+        $(".headercont").hide();
+        $(".headercont").removeClass("opened");
+        $(".headercont").show();
+        $(".headercont").css("opacity",1);
+        
+        $(".openmenu").click(()=>{
+            $(".headercont").toggleClass("opened");
+        });
+
+        $(document.body).click((e)=>{
+            if($(".headercont").hasClass("opened")){
+                if(!["menuitem","openmenu"].includes(e.target.className)){
+                    $(".headercont").removeClass("opened");
+                }
+            }
+        });
+    }
+</script>
+</html>
