@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Дневник | Лицей 130</title>
+    <script
+    src="https://code.jquery.com/jquery-3.7.1.min.js"
+    integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+    crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-md5@0.7.3/build/md5.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/static/css/fonts.css">
+    <link rel="stylesheet" href="/static/css/login.css">
+</head>
+<body>
+    <span class="loader hide"></span>
+    <div class="cont">
+        <a class="title">
+            Дневник
+        </a>
+        <a class="error hide"></a>
+        <form id="lgn">
+            <input type="text" id="lgn_val" name="login" placeholder="Логин" required>
+            <input type="password" id="pswd_val" name="password" placeholder="Пароль" required>
+            <input type="submit" value="Войти">
+        </form>
+    </div>
+    <div class="by">by <a href="https://t.me/btless" target="_blank" rel="noopener noreferrer">@btless</a> & <a href="https://t.me/n1ret" target="_blank" rel="noopener noreferrer">@n1ret</a></div>
+</body>
+<script>
+    document.body.onload= ()=>{
+        function showError(err){
+            $(".error").text(err);
+            $(".error").removeClass("hide");
+            $(".loader").addClass("hide");
+            $(".cont").removeClass("hide");
+        }
+        $("#lgn").submit(e=>{
+            e.preventDefault();
+            var req={
+                login:$("#lgn_val").val(),
+                paswd:md5($("#pswd_val").val())
+            }
+            console.log(req);
+            setTimeout(()=>{
+                fetch('/api/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json;charset=utf-8'
+                    },
+                    body: JSON.stringify(req)
+                }).then(response => {
+                    $("#lgn > input[type='submit']").prop("disabled",false);
+                    if(response.ok){
+                        const result = response.json();
+                        if(result.ok){
+                            window.location.replace("/");
+                        } else {
+                            showError(result.error);
+                        }
+                    } else {
+                        try {
+                            showError(response.json().error);
+                        } catch {
+                            showError(response.statusText);
+                        }
+                        
+                    }
+                });
+            },500);
+            $("#lgn > input[type='submit']").prop("disabled",true);
+            $(".loader").removeClass("hide");
+            $(".cont").addClass("hide");
+            $(".error").addClass("hide");
+        });
+    }
+</script>
+</html>

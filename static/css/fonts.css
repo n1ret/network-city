@@ -1,0 +1,13 @@
+@font-face {
+    font-family: "Galiver";
+    src: url('/static/fonts/GALS.ttf');
+  }
+  @font-face {
+    font-family: "Galiver";
+    font-weight: 800;
+    src: url('/static/fonts/GALSB.ttf');
+  }
+  @font-face {
+    font-family: "Golos";
+    src: url('/static/fonts/golos.ttf');
+  }
