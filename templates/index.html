@@ -19,6 +19,9 @@
 <script src="https://unpkg.com/simplebar@latest/dist/simplebar.min.js"></script>
 </head>
 <body>
+    <div class="loadercont">
+        <span class="loader"></span>
+    </div>
     <div class="cont">
         <div class="maincont">
             <div class="headercont opened" style="opacity: 0;">
@@ -68,6 +71,9 @@
                 }
             }
         });
+        setTimeout(()=>{
+            $(".loadercont").addClass("hide");
+        },300);
     }
 </script>
 </html>
