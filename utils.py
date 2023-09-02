@@ -39,7 +39,7 @@ def get_context(lessons: List[btypes.UserLesson]) -> btypes.IndexPageContext:
             vals=list(map(lambda i:i[1],marks[lesson.lesson].items()))
             avg = sum(vals) / len(vals)
             marks[lesson.lesson]["Ср. Балл"]="{:.2f}".format(avg)
-    lessons_names=list(lessons_names)
+    lessons_names=sorted(list(lessons_names))
     dates=list(dates)
     dates.sort(key=lambda date: datetime.strptime(date, "%d.%m"))
     dates.append("Ср. Балл")
