@@ -78,4 +78,10 @@ def update_json(file_name):
 
 if __name__ == "__main__":
     from sys import argv
-    parse_table('10 Д', argv[1], DataBase())
+    if len(argv) < 3:
+        print(
+            'Must be call with format:\n'
+            f'{path.split(__file__)[1]} xlsx_file school_class'
+        )
+        exit(-1)
+    parse_table(argv[2], argv[1], DataBase())
