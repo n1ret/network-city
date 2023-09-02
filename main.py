@@ -105,6 +105,9 @@ def api_change_pass():
     with btypes.DataBase() as db:
         db.update_user_password(req["user_id"], req["new"])
 
+    session["password_hash"]=req["new"]
+    session.modified=True
+
     return jsonify({"ok": True, "error": ""})
 
 
