@@ -2,7 +2,14 @@ from mysql import connector
 import pickle
 from dataclasses import dataclass, fields
 from typing import List, Union, Optional, DefaultDict, get_args
+import os
+from dotenv import load_dotenv
+dotenv_path = os.path.join(os.path.dirname(__file__), ".env")
+if os.path.exists(dotenv_path):
+    load_dotenv(dotenv_path)
 
+db_user=os.environ.get("DB_USER")
+db_password=os.environ.get("DB_PASSWORD")
 
 class SqlModel:
     def __post_init__(self):
@@ -60,7 +67,7 @@ class IndexPageContext:
 
 class DataBase:
     def __init__(
-        self, host="127.0.0.1", database="diary", user="root", password=""
+        self, host="127.0.0.1", database="diary", user=db_user, password=db_password
     ) -> None:
         self.con = connector.connect(
             user=user, password=password, host=host, database=database
