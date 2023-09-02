@@ -31,7 +31,9 @@ with DataBase() as db:
 
 doc=Document()
 
-for classr,logins in zip(classes,logins_bcls):
+j=len(classes)-1
+
+for i,classr,logins in enumarate(zip(classes,logins_bcls)):
     doc.add_heading(classr,1)
     doc.add_paragraph("diary130.ru")
     table = doc.add_table(rows=1, cols=2)
@@ -44,8 +46,9 @@ for classr,logins in zip(classes,logins_bcls):
         row = table.add_row().cells
         row[0].text = login
         row[1].text = get_default_password(login)
-    doc.add_page_break()
     table.style="Table Grid"
+    if i<j:
+        doc.add_page_break()
 
 sections = doc.sections
 for section in sections:
