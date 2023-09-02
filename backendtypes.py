@@ -212,7 +212,7 @@ class DataBase:
         self.q.execute("SELECT LAST_INSERT_ID()")
         return self.q.fetchone()[0]
 
-    def get_used_logins():
+    def get_used_logins(self):
         self.q.execute("SELECT login FROM users")
         return set(self.q.fetchall())
 
