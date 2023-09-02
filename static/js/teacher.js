@@ -45,9 +45,9 @@ document.body.onload=()=>{
             $(".loadercont").addClass("hide");
             resp.json().then((res)=>{
                 $("#student-select").html("");
-                for(classm in res.class_students){
+                res.class_students.forEach(classm => {
                     $("#student-select").append(new Option(classm[0],classm[1]));
-                }
+                });
             })
         });
         $(".loadercont").removeClass("hide");
