@@ -32,6 +32,8 @@ document.body.onload= ()=>{
                 } else {
                     showError(response.statusText);
                 }
+            }).catch(err=>{
+                showError(err);
             });
         },500);
         $("#lgn > input[type='submit']").prop("disabled",true);
