@@ -8,12 +8,26 @@
     background-color: #ffffff33;
     border-radius: 3px;
   }
+@media screen and (max-width: 2000px) {
+    @-moz-document url-prefix() {
+        html{
+          -moz-transform: scale(2)!important;
+          height: calc(100% / 2)!important;
+          width: calc(100% / 2)!important;
+        }
+      }
+      body{
+        zoom: 2!important;
+      }
+}
+@-moz-document url-prefix() {
   html{
     -moz-transform: scale(1.5);
     -moz-transform-origin: 0 0;
     height: calc(100% / 1.5);
     width: calc(100% / 1.5);
   }
+}
 body{
     zoom: 1.5;
     font-family: "Golos";
