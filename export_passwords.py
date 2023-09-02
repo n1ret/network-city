@@ -33,7 +33,7 @@ doc=Document()
 
 j=len(classes)-1
 
-for i,classr,logins in enumerate(zip(classes,logins_bcls)):
+for i,(classr,logins) in enumerate(zip(classes,logins_bcls)):
     doc.add_heading(classr,1)
     doc.add_paragraph("diary130.ru")
     table = doc.add_table(rows=1, cols=2)
