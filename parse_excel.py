@@ -77,4 +77,5 @@ def update_json(file_name):
 
 
 if __name__ == "__main__":
-    parse_table('10 Д', '10 Д.xlsx', DataBase())
+    from sys import argv
+    parse_table('10 Д', argv[1], DataBase())
