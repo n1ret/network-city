@@ -36,6 +36,23 @@ body{
     z-index: 100;
     transition: opacity .5s;
 }
+.modalcont{
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    background-color: #1616169f;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity .5s;
+}
+.modalcont.hide{
+    opacity: 0;
+    pointer-events: none;
+}
+.modal {
+    zoom: 1.05;
+}
 .loadercont.hide{
     opacity: 0;
     pointer-events: none;

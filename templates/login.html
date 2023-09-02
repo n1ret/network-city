@@ -11,11 +11,12 @@
     crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/js-md5@0.7.3/build/md5.min.js"></script>
     <link rel="stylesheet" href="/static/css/fonts.css">
+    <link rel="stylesheet" href="/static/css/inputs.css">
     <link rel="stylesheet" href="/static/css/login.css">
 </head>
 <body>
     <span class="loader hide"></span>
-    <div class="cont">
+    <div class="modal">
         <a class="title">
             Дневник
         </a>
@@ -34,7 +35,7 @@
             $(".error").text(err);
             $(".error").removeClass("hide");
             $(".loader").addClass("hide");
-            $(".cont").removeClass("hide");
+            $(".modal").removeClass("hide");
         }
         $("#lgn").submit(e=>{
             e.preventDefault();
@@ -67,7 +68,7 @@
             },500);
             $("#lgn > input[type='submit']").prop("disabled",true);
             $(".loader").removeClass("hide");
-            $(".cont").addClass("hide");
+            $(".modal").addClass("hide");
             $(".error").addClass("hide");
         });
     }
