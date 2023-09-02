@@ -26,7 +26,7 @@ app = Flask(
     static_folder=os.path.join(os.path.dirname(__file__), "static"),
     template_folder=os.path.join(os.path.dirname(__file__), "templates"),
 )
-app.config["uploads"]=os.path.join(__file__,"files")
+app.config["uploads"]=os.path.join(os.path.dirname(__file__),"excel_files")
 app.secret_key = os.environ.get("SECRET_KEY")
 app.debug = bool(int(os.environ.get("DEBUG_MODE")))
 if app.debug:
