@@ -9,7 +9,6 @@ from flask import (
 )
 import re
 import os
-from uuid import uuid4
 from dotenv import load_dotenv
 import backendtypes as btypes
 import utils
@@ -26,7 +25,6 @@ app = Flask(
     static_folder=os.path.join(os.path.dirname(__file__), "static"),
     template_folder=os.path.join(os.path.dirname(__file__), "templates"),
 )
-app.config["uploads"] = os.path.join(os.path.dirname(__file__), "excel_files")
 app.secret_key = os.environ.get("SECRET_KEY")
 app.debug = bool(int(os.environ.get("DEBUG_MODE")))
 if app.debug:
@@ -171,15 +169,12 @@ def api_get_student_marks():
 @teacher_required
 def api_update_marks():
     classr = request.form.get("class")
-    filer = request.files.get("file")
-    filepath = os.path.join(app.config["uploads"], str(uuid4()) + ".xlsx")
-    filer.save(filepath)
+    file = request.files.get("file").read()
     with btypes.DataBase() as db:
         try:
-            parse_table(classr, filepath, db)
+            parse_table(classr, file, db)
         except Exception as e:
             return jsonify({"ok": False, "error": str(e)})
-    os.remove(filepath)
     return jsonify({"ok": True, "error": ""})
 
 
