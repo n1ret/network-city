@@ -65,9 +65,14 @@ input[type="file"]{
 select{
     background-color: #161616;
     color: white;
-    border-radius: 7px;
+    border-radius: 5px;
+    cursor: pointer;
 }
-input[type="submit"], input[type="file"]{
+input[type="file"],input[type="file"]::file-selector-button{
+    padding: 5px 7px!important;
+    width: auto!important;
+}
+input[type="submit"], input[type="file"],input[type="file"]::file-selector-button{
     margin-top: 5px;
     background-color: #161616;
     cursor: pointer;
@@ -80,7 +85,7 @@ input[type="submit"], input[type="file"]{
     transition: background-color .3s;
     -webkit-tap-highlight-color: transparent;
 }
-input[type="submit"]:hover,input[type="submit"]:focus{
+input[type="submit"]:hover,input[type="submit"]:focus,input[type="file"]::file-selector-button{
     background-color: #212121;
 }
 input:-webkit-autofill,
