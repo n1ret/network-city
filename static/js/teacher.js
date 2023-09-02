@@ -80,7 +80,6 @@ document.body.onload=()=>{
             body: req
         })
         .then((resp)=>{
-            $(".loadercont").addClass("hide");
             window.location.reload();
         });
         $(".loadercont").removeClass("hide");
