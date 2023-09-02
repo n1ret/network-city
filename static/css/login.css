@@ -3,8 +3,9 @@ html{
 }
 html{
     -moz-transform: scale(1.6);
-    -moz-transform-origin: 50% 0;
+    -moz-transform-origin: 0 0;
     height: calc(100% / 1.6);
+    width: calc(100% / 1.6);
   }
 body {
     zoom: 1.6;

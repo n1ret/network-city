@@ -10,8 +10,9 @@
   }
   html{
     -moz-transform: scale(1.5);
-    -moz-transform-origin: 50% 0;
+    -moz-transform-origin: 0 0;
     height: calc(100% / 1.5);
+    width: calc(100% / 1.5);
   }
 body{
     zoom: 1.5;
@@ -111,6 +112,7 @@ tr {
 }
 tr th:first-of-type{
     position: sticky;
+    background-clip: padding-box;
     left: 0px;
     z-index: 2;
     background: linear-gradient(90deg, rgba(10,10,10,1) 95%, rgba(10,10,10,0) 100%);
