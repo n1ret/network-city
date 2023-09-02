@@ -188,7 +188,7 @@ class DataBase:
     def insert_or_update_lesson(self, user_ids: tuple[int], lesson: str, users_marks: Iterable[bytes]):
         self.q.executemany(
             "INSERT INTO users_lesson(user_id, lesson, marks) VALUES(%s, %s, %s)",
-            zip(user_ids, [lesson]*len(user_ids), users_marks)
+            tuple(zip(user_ids, [lesson]*len(user_ids), users_marks))
         )
         self._commit()
 
