@@ -72,6 +72,11 @@ def api_login():
         usr = db.get_user_by_logpas(req["login"], req["paswd"])
     if not (usr):
         return jsonify({"ok": False, "error": "Неверный логин или пароль"})
+    
+    if usr.password_hash=="":
+        with btypes.DataBase() as db:
+            db.update_user_password(usr.uid, req["paswd"])
+        usr.password_hash=req["paswd"]
 
     session["is_logged"] = True
     session["user_id"] = usr.uid
