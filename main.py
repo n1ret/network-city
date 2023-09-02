@@ -138,6 +138,17 @@ def api_get_class_students():
         ans.append([i.fullname,i.uid])
     return jsonify({"ok":True,"class_students":ans})
 
+@app.route("/api/get_student_marks")
+def api_get_student_marks():
+    if not session["is_logged"]:
+        return jsonify({"ok": True, "error": ""})
+    with btypes.DataBase() as db:
+        if not (db.check_if_teacher(session["user_id"])):
+            return jsonify({"ok": False, "error": "Only for teachers"})
+        lessons=db.get_user_lessons(request.args.get("student"))
+    ctx = utils.get_context(lessons)
+    return render_template("marks.html",ctx=ctx)
+
 @app.route("/")
 def main():
     if session.get("is_logged"):
