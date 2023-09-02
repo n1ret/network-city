@@ -36,7 +36,8 @@ def get_context(lessons: List[btypes.UserLesson]) -> btypes.IndexPageContext:
         if len(marks[lesson.lesson]) == 0:
             marks[lesson.lesson]["Ср. Балл"]=""
         else:
-            avg = sum(marks[lesson.lesson]) / len(marks[lesson.lesson])
+            vals=list(map(lambda i:i[1],marks[lesson.lesson].items()))
+            avg = sum(vals) / len(vals)
             marks[lesson.lesson]["Ср. Балл"]="{:.2f}".format(avg)
     lessons_names=list(lessons_names)
     dates=list(dates)
