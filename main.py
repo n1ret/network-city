@@ -51,6 +51,8 @@ def make_session_permanent():
 
 @app.route("/api/login", methods=["POST"])
 def api_login():
+    if session["is_logged"]: return jsonify({"ok":True,"error":""})
+
     req = request.json
     if "login" not in req or "paswd" not in req:
         return make_response(
@@ -79,6 +81,8 @@ def api_login():
 
 @app.route("/api/change_pass", methods=["POST"])
 def api_change_pass():
+    if not(session["is_logged"]): return jsonify({"ok":True,"error":""})
+
     req = request.json
     if "user_id" not in req or "old" not in req or "new" not in req:
         return make_response(

@@ -11,7 +11,6 @@ document.body.onload= ()=>{
             login:$("#lgn_val").val(),
             paswd:md5($("#pswd_val").val())
         }
-        console.log(req);
         setTimeout(()=>{
             fetch('/api/login', {
                 method: 'POST',

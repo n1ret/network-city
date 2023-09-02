@@ -44,7 +44,6 @@ document.body.onload=()=>{
             old:md5($("#old_val").val()),
             new:md5($("#new_val").val())
         }
-        console.log(req);
         setTimeout(()=>{
             fetch('/api/change_pass', {
                 method: 'POST',
