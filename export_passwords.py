@@ -7,9 +7,10 @@ import dotenv
 import os
 
 dotenv.load_dotenv(".env")
-argparse.ArgumentParser(prog='Export passwords',
+parser=argparse.ArgumentParser(prog='Export passwords',
                     description='Export default passwords using hash of logins and sends word file using telegram bot')
 
+parser.add_argument('-f', '--filename', default="passwords.docx")
 parser.add_argument('-u', '--userid', default=os.environ.get("EXPORT_USER_ID"))
 parser.add_argument('-b', '--bottoken', default=os.environ.get("EXPORT_BOT_TOKEN"))
 parser.add_argument('-s', '--saveonly', action='store_true')
@@ -30,7 +31,7 @@ with DataBase() as db:
 
 doc=Document()
 
-for classr,logins in zip(classs,loginss):
+for classr,logins in zip(classes,logins_bcls):
     doc.add_heading(classr,1)
     doc.add_paragraph("diary130.ru")
     table = doc.add_table(rows=1, cols=2)
@@ -52,7 +53,7 @@ for section in sections:
     section.bottom_margin = Cm(1)
     section.left_margin = Cm(2)
     section.right_margin = Cm(2)
-doc.save("passwords.docx")
+doc.save(args.filename)
 
 if not(args.saveonly):
-    rq.post(f"https://api.telegram.org/bot{args.bottoken}/sendDocument", data={'chat_id': args.userid}, files={'document': open("passwords.docs","rb")})
+    rq.post(f"https://api.telegram.org/bot{args.bottoken}/sendDocument", data={'chat_id': args.userid}, files={'document': open(args.filename,"rb")})
