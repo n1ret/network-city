@@ -69,6 +69,6 @@ document.body.onload=()=>{
         $("#chng > input[type='submit']").prop("disabled",true);
         $(".loadercont").removeClass("hide");
         $(".error").addClass("hide");
-        history.pushState(null, null, window.location.pathname);
     });
+    history.pushState(null, null, window.location.pathname);
 }

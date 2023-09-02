@@ -126,6 +126,7 @@ def main():
             lessons = db.get_user_lessons(usr.uid)
 
         ctx = utils.get_context(lessons)
+        ctx.classr = usr.classr
         ctx.fullname = usr.fullname
         ctx.user_id = usr.uid
         ctx.last_update = utils.get_last_parse_timestamp()

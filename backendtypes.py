@@ -61,6 +61,7 @@ class IndexPageContext:
     lessons_names: List[str]
     marks: DefaultDict[str, DefaultDict[str, str]]
     user_id: int = 0
+    classr: str = ""
     fullname: str = ""
     last_update: str = ""
 
