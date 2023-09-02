@@ -25,10 +25,10 @@
     <div class="cont">
         <div class="maincont">
             <div class="headercont opened" style="opacity: 0;">
-                <div class="header"><a class="usname">User Name</a><a class="openmenu"><i class="fa-solid fa-angle-down"></i></a></div>
-                <a class="lastupd">Обновлено Date Time</a>
+                <div class="header"><a class="usname">{{ ctx.fullname }}</a><a class="openmenu"><i class="fa-solid fa-angle-down"></i></a></div>
+                <a class="lastupd">Обновлено {{ ctx.last_update }}</a>
                 <div class="menu">
-                    <a class="menuitem" onclick="window.location.replace('/logout')"><i class="fa-solid fa-pen-to-square"></i> Изменить пароль</a>
+                    <a class="menuitem" onclick=""><i class="fa-solid fa-pen-to-square"></i> Изменить пароль</a>
                     <a class="menuitem" onclick="window.location.replace('/logout')"><i class="fa-solid fa-arrow-right-from-bracket"></i> Выйти</a>
                 </div>
             </div>
@@ -37,12 +37,18 @@
                     <table>
                         <tr>
                             <th>&nbsp;</th>
-                            <th>Date</th>
+                            {% for date in ctx.dates %}
+                            <th>{{ date }}</th>
+                            {% endfor %}
                         </tr>
+                        {% for lesson in ctx.lessons_names %}
                         <tr>
-                            <th>Lesson Name</th>
-                            <td>Mark</td>
+                            <th>{{ lesson }}</th>
+                            {% for date in ctx.dates %}
+                            <td>{{ ctx.marks[lesson][date] }}</td>
+                            {% endfor %}
                         </tr>
+                        {% endfor %}
                     </table>
                 </div>
             </div>
