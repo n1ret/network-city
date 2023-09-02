@@ -53,7 +53,8 @@ input,input[type="file"]::file-selector-button {
 }
 input[type="file"]::file-selector-button{
     display: inline-block!important;
-    border: 1px solid #0a0a0a!important;
+    border: 2px solid #0a0a0a!important;
+    margin-top: 0!important;
 }
 input:not([type="submit"]){
     background-color: transparent;
