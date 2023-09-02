@@ -33,4 +33,13 @@ def get_context(lessons: List[btypes.UserLesson]) -> btypes.IndexPageContext:
             date = parse_timestamp(mark.timestamp)
             dates.add(date)
             marks[lesson.lesson][date] = mark.mark
+        if len(marks[lesson.lesson]) == 0:
+            marks[lesson.lesson]["Ср. Балл"]=""
+        else:
+            avg = sum(marks[lesson.lesson]) / len(marks[lesson.lesson])
+            marks[lesson.lesson]["Ср. Балл"]="{:.2f}".format(avg)
+    lessons_names=list(lessons_names)
+    dates=list(dates)
+    dates.sort(key=lambda date: datetime.strptime(date, "%d.%m"))
+    dates.append("Ср. Балл")
     return btypes.IndexPageContext(dates, lessons_names, marks)
