@@ -175,7 +175,7 @@ class DataBase:
         for user_fullname in user_fullnames:
             self.q.execute(
                 "SELECT uid FROM users WHERE fullname LIKE %s AND class = %s",
-                user_fullname, school_class
+                (user_fullname, school_class)
             )
             user_id = self.q.fetchone()
             if user_id is None:
