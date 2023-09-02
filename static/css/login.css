@@ -13,6 +13,18 @@ html{
         zoom: 2!important;
       }
 }
+@media screen and (min-width: 1000px) {
+    @-moz-document url-prefix() {
+        html{
+          -moz-transform: scale(1.75)!important;
+          height: calc(100% / 1.75)!important;
+          width: calc(100% / 1.75)!important;
+        }
+      }
+      body{
+        zoom: 1.75!important;
+      }
+}
 @-moz-document url-prefix() {
     html{
       -moz-transform: scale(1.6);
@@ -33,7 +45,7 @@ body {
     margin: 0;
     margin-bottom: 30%;
     user-select: none;
-    overflow-x: hidden;
+    overflow: hidden;
 }
 .by {
     position: absolute;
