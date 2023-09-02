@@ -59,6 +59,9 @@ input:not([type="submit"]){
 input:not([type="submit"]):focus,input:not([type="submit"]):active{
     border-color: #ffffff33;
 }
+input[type="file"]{
+    font-size: .85em;
+}
 input[type="submit"]{
     margin-top: 5px;
     background-color: #161616;

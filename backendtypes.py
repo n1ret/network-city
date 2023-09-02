@@ -66,6 +66,12 @@ class IndexPageContext:
     fullname: str = ""
     last_update: str = ""
 
+@dataclass
+class TeacherPageContext:
+    classnames: List[str]
+    user_id: int = 0
+    fullname: str = ""
+    last_update: str = ""
 
 class DataBase:
     def __init__(

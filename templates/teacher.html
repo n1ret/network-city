@@ -10,7 +10,7 @@
     integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
     crossorigin="anonymous"></script>
     <link rel="stylesheet" href="/static/css/fonts.css">
-    <link rel="stylesheet" href="/static/css/index.css">
+    <link rel="stylesheet" href="/static/css/teacher.css">
     <link rel="stylesheet" href="/static/css/inputs.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://unpkg.com/simplebar@latest/dist/simplebar.css"/>
@@ -42,9 +42,40 @@
                     <a class="menuitem" onclick="window.location.replace('/logout')"><i class="fa-solid fa-arrow-right-from-bracket"></i> Выйти</a>
                 </div>
             </div>
-            <div class="markscont">
-                <div data-simplebar>
-                    {% include "marks.html" with context %}
+            <div class="markscont controw">
+                <form id="updinfo">
+                    <a class="smalltitle">Обновить информацию</a>
+                    <div>
+                        <label for="class">Класс: </label>
+                        <select name="class" id="class-select2">
+                            {% for class in ctx.classnames %}
+                            <option value="{{ class }}">{{ class }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <input type="file" accept=".xlsx,.xls" id="inpfile">
+                    <input type="submit" value="Обновить">
+                </form>
+            </div>
+            <div class="markscont rembottom">
+                <form id="getinfo">
+                    <a class="smalltitle">Получить информацию</a>
+                    <div>
+                        <label for="class">Класс: </label>
+                        <select name="class" id="class-select">
+                            {% for class in ctx.classnames %}
+                            <option value="{{ class }}">{{ class }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div>
+                        <label for="student">Ученик: </label>
+                        <select name="student" id="student-select">
+                        </select>
+                    </div>
+                    <input type="submit" value="Получить">
+                </form>
+                <div data-simplebar id="viewinfo">
                 </div>
             </div>
         </div>
@@ -52,5 +83,5 @@
     <div class="by">by <a href="https://t.me/btless" target="_blank" rel="noopener noreferrer">@btless</a> & <a href="https://t.me/n1ret" target="_blank" rel="noopener noreferrer">@n1ret</a></div>
 </body>
 <script>const my_user_id={{ ctx.user_id }}</script>
-<script src="/static/js/index.js"></script>
+<script src="/static/js/teacher.js"></script>
 </html>

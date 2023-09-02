@@ -1,0 +1,16 @@
+<table>
+    <tr>
+        <th>{{ctx.classr}}</th>
+        {% for date in ctx.dates %}
+        <th>{{ date }}</th>
+        {% endfor %}
+    </tr>
+    {% for lesson in ctx.lessons_names %}
+    <tr>
+        <th>{{ lesson }}</th>
+        {% for date in ctx.dates %}
+        <td>{{ ctx.marks[lesson][date] }}</td>
+        {% endfor %}
+    </tr>
+    {% endfor %}
+</table>

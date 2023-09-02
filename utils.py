@@ -1,6 +1,6 @@
 import json
 from datetime import datetime, timezone, timedelta
-from typing import List, Union
+from typing import List, Union, Set
 import backendtypes as btypes
 from collections import defaultdict
 import os
@@ -22,6 +22,16 @@ def get_last_parse_timestamp(fmt: str = "%d.%m %H:%M") -> str:
         data = json.loads(f.read())
     return parse_timestamp(data["last_parse"], fmt)
 
+def generate_logins(logins: Set[str],fullnames: List[str]) -> List[str]:
+    result=[]
+    for name in fullnames:
+        while name in logins:
+            if name[-1].isdigit():
+                name=name[:-1]+str(int(name[-1])+1)
+            else:
+                name+="1"
+        result.append(name)
+    return result
 
 def get_context(lessons: List[btypes.UserLesson]) -> btypes.IndexPageContext:
     dates = set()
