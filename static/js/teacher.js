@@ -39,6 +39,7 @@ document.body.onload=()=>{
     }
 
     $("#class-select").change((e)=>{
+        $("#viewinfo").html("");
         fetch('/api/get_class_students?'+ new URLSearchParams({
             classr: e.target.value
         })).then((resp)=>{
@@ -52,6 +53,9 @@ document.body.onload=()=>{
         });
         $(".loadercont").removeClass("hide");
     })
+    $("#student-select").change((e)=>{
+        $("#viewinfo").html("");
+    });
     $("#class-select").change();
 
     $("#getinfo").submit(e=>{
