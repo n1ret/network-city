@@ -8,6 +8,11 @@
     background-color: #ffffff33;
     border-radius: 3px;
   }
+  html{
+    -moz-transform: scale(1.5);
+    -moz-transform-origin: 50% 0;
+    height: calc(100% / 1.5);
+  }
 body{
     zoom: 1.5;
     font-family: "Golos";
@@ -19,6 +24,7 @@ body{
     flex-direction: column;
     -moz-transform: scale(1.5);
     overflow: hidden;
+    -moz-transform-origin: 50% 0;
 }
 .by {
     display: block;
@@ -54,7 +60,6 @@ body{
 }
 .modal {
     zoom: 1.05;
-    -moz-transform: scale(1.05);
 }
 .loadercont.hide{
     opacity: 0;
