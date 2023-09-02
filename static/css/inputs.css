@@ -62,7 +62,12 @@ input:not([type="submit"]):focus,input:not([type="submit"]):active{
 input[type="file"]{
     font-size: .85em;
 }
-input[type="submit"]{
+select{
+    background-color: #161616;
+    color: white;
+    border-radius: 7px;
+}
+input[type="submit"], input[type="file"]{
     margin-top: 5px;
     background-color: #161616;
     cursor: pointer;
