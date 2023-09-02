@@ -168,7 +168,7 @@ class DataBase:
         )
         self._commit()
         self.q.execute("SELECT LAST_INSERT_ID()")
-        return self.q.fetchone()[0]
+        return self.q.fetchone()
 
     def convert_fullnames_to_user_ids(self, user_fullnames: tuple[str], school_class: str):
         user_ids = []
@@ -178,9 +178,10 @@ class DataBase:
                 (user_fullname, school_class)
             )
             user_id = self.q.fetchone()
+            print(user_id)
             if user_id is None:
                 user_id = self.insert_or_update_user(user_fullname, school_class)
-            user_ids.append(user_id[0])
+            user_ids.append(user_id)
         return user_ids
 
     def insert_or_update_lesson(self, user_ids: tuple[int], lesson: str, users_marks: Iterable[bytes]):
