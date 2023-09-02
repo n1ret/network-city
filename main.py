@@ -13,16 +13,20 @@ import os
 from dotenv import load_dotenv
 import backendtypes as types
 import utils
-
+import sys
 
 dotenv_path = os.path.join(os.path.dirname(__file__), ".env")
 if os.path.exists(dotenv_path):
     load_dotenv(dotenv_path)
 
-app = Flask("diary")
+app = Flask(
+    "diary",
+    static_folder=os.path.join(sys.path, "static"),
+    template_folder=os.path.join(sys.path, "templates"),
+)
 app.secret_key = os.environ.get("SECRET_KEY")
 
-app.debug = os.environ.get("DEBUG_MODE")
+app.debug = bool(os.environ.get("DEBUG_MODE"))
 if app.debug:
     app.templates_auto_reload = True
 
