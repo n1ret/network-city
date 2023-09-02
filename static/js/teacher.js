@@ -51,15 +51,10 @@ document.body.onload=()=>{
                 });
             })
         });
+        $("#student-select").change();
         $(".loadercont").removeClass("hide");
     })
     $("#student-select").change((e)=>{
-        $("#viewinfo").html("");
-    });
-    $("#class-select").change();
-
-    $("#getinfo").submit(e=>{
-        e.preventDefault();
         const req={
             class:$("#class-select").val(),
             student:$("#student-select").val()
@@ -72,6 +67,12 @@ document.body.onload=()=>{
             })
         });
         $(".loadercont").removeClass("hide");
+    });
+    $("#class-select").change();
+    $("#student-select").change();
+
+    $("#getinfo").submit(e=>{
+        e.preventDefault();
     })
     
     $("#updinfo").submit(e=>{
