@@ -18,7 +18,6 @@ body {
     margin: 0;
     margin-bottom: 30%;
     user-select: none;
-    -moz-transform: scale(1.6);
     overflow-x: hidden;
 }
 .by {
