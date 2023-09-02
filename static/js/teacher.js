@@ -84,8 +84,14 @@ document.body.onload=()=>{
             method:'POST',
             body: req
         })
-        .then((resp)=>{
-            window.location.reload();
+        .then(resp=>{
+            resp.json().then(res=>{
+                if(res.ok){
+                    window.location.reload();
+                } else {
+                    alert(res.error);
+                }
+            })
         });
         $(".loadercont").removeClass("hide");
     })
