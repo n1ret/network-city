@@ -23,18 +23,6 @@ def get_last_parse_timestamp(fmt: str = "%d.%m %H:%M") -> str:
     return parse_timestamp(data["last_parse"], fmt)
 
 
-def next_available_login(logins: Set[str], fullname: str) -> str:
-    fname, lname = fullname.split()
-    name = fname + lname[0]
-    add = ""
-    while name + add in logins:
-        if add:
-            add = str(int(add) + 1)
-        else:
-            add = "1"
-    return name + add
-
-
 def get_context(lessons: List[UserLesson]) -> IndexPageContext:
     dates = set()
     lessons_names = set()

@@ -4,7 +4,6 @@ from dataclasses import dataclass, fields
 from typing import List, Union, Optional, DefaultDict, get_args, Iterable
 import os
 from dotenv import load_dotenv
-from utils import next_available_login
 
 dotenv_path = os.path.join(os.path.dirname(__file__), ".env")
 if os.path.exists(dotenv_path):
@@ -76,6 +75,16 @@ class TeacherPageContext:
     fullname: str = ""
     last_update: str = ""
 
+def next_available_login(logins: Set[str], fullname: str) -> str:
+    fname, lname = fullname.split()
+    name = fname + lname[0]
+    add = ""
+    while name + add in logins:
+        if add:
+            add = str(int(add) + 1)
+        else:
+            add = "1"
+    return name + add
 
 class DataBase:
     def __init__(
