@@ -124,7 +124,7 @@ class DataBase:
         Returns:
             List[UserLesson]: List of UserLesson objects
         """
-        self.q.execute("SELECT * FROM users_lessons WHERE user_id = %s", (user_id,))
+        self.q.execute("SELECT * FROM users_lesson WHERE user_id = %s", (user_id,))
         ans = []
         for userlessonraw in self.q.fetchall():
             userlesson = UserLesson(*userlessonraw)
