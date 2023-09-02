@@ -160,7 +160,7 @@ def api_get_student_marks():
     ctx = utils.get_context(lessons)
     return render_template("marks.html",ctx=ctx)
 
-@app.route("/api/update_marks")
+@app.route("/api/update_marks", methods=["POST"])
 @teacher_required
 def api_update_marks():
     classr=request.form.get("class")
