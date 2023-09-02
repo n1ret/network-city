@@ -4,6 +4,7 @@ from dataclasses import dataclass, fields
 from typing import List, Union, Optional, DefaultDict, get_args, Iterable, Set
 import os
 from dotenv import load_dotenv
+from hashlib import md5
 
 dotenv_path = os.path.join(os.path.dirname(__file__), ".env")
 if os.path.exists(dotenv_path):
@@ -74,6 +75,11 @@ class TeacherPageContext:
     user_id: int = 0
     fullname: str = ""
     last_update: str = ""
+
+def get_default_password_hash(login: str) -> str:
+    password=md5(login.encode()).hexdigest()[:10]
+    hash=md5(password.encode()).hexdigest()
+    return hash
 
 def next_available_login(logins: Set[str], fullname: str) -> str:
     fname, lname = fullname.split()
@@ -229,8 +235,9 @@ class DataBase:
             user_id = self.q.fetchone()
             if user_id is None:
                 login = next_available_login(used_logins, user_fullname)
+                password_hash = get_default_password_hash(login)
                 user_id = self.insert_or_update_user(
-                    user_fullname, school_class, login=login
+                    user_fullname, school_class, login=login,password_hash=password_hash
                 )
             else:
                 user_id = user_id[0]
