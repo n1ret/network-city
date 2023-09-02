@@ -8,12 +8,12 @@ from flask import (
     redirect,
 )
 import re
-from mysql.connector import connect
+# from mysql.connector import connect
 import os
 from dotenv import load_dotenv
 import backendtypes as btypes
 import utils
-import sys
+# import sys
 
 dotenv_path = os.path.join(os.path.dirname(__file__), ".env")
 if os.path.exists(dotenv_path):
@@ -41,9 +41,10 @@ def make_session_permanent():
             with btypes.DataBase() as db:
                 usr = db.get_user_by_id(session["user_id"])
             if (
-                not (usr)
-                or utils.get_md5(usr.password_hash, app.secret_key)
-                != session["password_hash"]
+                not (usr) or
+                utils.get_md5(
+                    usr.password_hash, app.secret_key
+                ) != session["password_hash"]
             ):
                 session.clear()
                 return redirect("/")
@@ -51,7 +52,7 @@ def make_session_permanent():
 
 @app.route("/api/login", methods=["POST"])
 def api_login():
-    if session["is_logged"]: return jsonify({"ok":True,"error":""})
+    if session["is_logged"]: return jsonify({"ok": True, "error": ""})
 
     req = request.json
     if "login" not in req or "paswd" not in req:
@@ -81,7 +82,7 @@ def api_login():
 
 @app.route("/api/change_pass", methods=["POST"])
 def api_change_pass():
-    if not(session["is_logged"]): return jsonify({"ok":True,"error":""})
+    if not session["is_logged"]: return jsonify({"ok": True, "error": ""})
 
     req = request.json
     if "user_id" not in req or "old" not in req or "new" not in req:

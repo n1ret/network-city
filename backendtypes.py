@@ -1,15 +1,16 @@
 from mysql import connector
 import pickle
 from dataclasses import dataclass, fields
-from typing import List, Union, Optional, DefaultDict, get_args
+from typing import List, Union, Optional, DefaultDict, get_args, Iterable
 import os
 from dotenv import load_dotenv
 dotenv_path = os.path.join(os.path.dirname(__file__), ".env")
 if os.path.exists(dotenv_path):
     load_dotenv(dotenv_path)
 
-db_user=os.environ.get("DB_USER")
-db_password=os.environ.get("DB_PASSWORD")
+db_user = os.environ.get("DB_USER")
+db_password = os.environ.get("DB_PASSWORD")
+
 
 class SqlModel:
     def __post_init__(self):
@@ -74,17 +75,19 @@ class DataBase:
         )
         self.q = self.con.cursor()
 
+        self.init_database()
+
     def close(self):
         self.con.close()
 
     def _commit(self):
         self.con.commit()
 
-    def __enter__(self):
-        return self
-
-    def __exit__(self, exc_type, exc_val, exc_tb):
-        self.close()
+    def init_database(self):
+        with open('tables.sql') as f:
+            tables = f.read()
+        for _ in self.q.execute(tables, multi=True): ...
+        self._commit()
 
     def _get_user(self):
         res = self.q.fetchone()
@@ -99,7 +102,7 @@ class DataBase:
             Optional[User]: None if user not found, otherwise User object
         """
         self.q.execute(
-            "SELECT * FROM users WHERE login = %s AND password_hash = %s",
+            "SELECT * FROM users WHERE login = %s AND (password_hash = %s OR password_hash = '')",
             (login, password_hash),
         )
         return self._get_user()
@@ -133,3 +136,60 @@ class DataBase:
             (new_password, user_id),
         )
         self.con.commit()
+
+    def insert_or_update_user(
+        self, fullname: str, school_class: str,
+        login: str = '', password_hash: str = '', is_teacher: bool = False
+    ) -> int:
+        """
+        Raises:
+            ValueError: Must be login and password_hash or no one of this
+
+        Returns:
+            int: inserted user id
+        """
+        if (
+            not all((login, password_hash)) and
+            any((login, password_hash))
+        ):
+            raise ValueError("Must be login and password_hash or no one of this")
+        self.q.execute(
+            """
+            INSERT INTO users(fullname, class, login, password_hash, is_teacher)
+            VALUES(%(0)s, %(1)s, %(2)s, %(3)s, %(4)s)
+            ON DUPLICATE KEY UPDATE
+            login=%(2)s, password_hash=%(3)s, is_teacher=%(4)s
+            """,
+            {str(i): param for i, param in enumerate(
+                (fullname, school_class, login, password_hash, is_teacher)
+            )}
+        )
+        self._commit()
+        self.q.execute("SELECT LAST_INSERT_ID()")
+        return self.q.fetchone()[0]
+
+    def convert_fullnames_to_user_ids(self, user_fullnames: tuple[str], school_class: str):
+        user_ids = []
+        for user_fullname in user_fullnames:
+            self.q.execute(
+                "SELECT uid FROM users WHERE fullname LIKE %s AND class = %s",
+                user_fullname, school_class
+            )
+            user_id = self.q.fetchone()
+            if user_id is None:
+                user_id = self.insert_or_update_user(user_fullname, school_class)
+            user_ids.append(user_id[0])
+        return user_ids
+
+    def insert_or_update_lesson(self, user_ids: tuple[int], lesson: str, users_marks: Iterable[bytes]):
+        self.q.executemany(
+            "INSERT INTO users_lesson(user_id, lesson, marks) VALUES(%s, %s, %s)",
+            zip(user_ids, [lesson]*len(user_ids), users_marks)
+        )
+        self._commit()
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.close()
