@@ -53,19 +53,15 @@
                 }).then(response => {
                     $("#lgn > input[type='submit']").prop("disabled",false);
                     if(response.ok){
-                        const result = response.json();
-                        if(result.ok){
-                            window.location.replace("/");
-                        } else {
-                            showError(result.error);
-                        }
+                        response.json().then(result=>{
+                            if(result.ok){
+                                window.location.reload();
+                            } else {
+                                showError(result.error);
+                            }
+                        });
                     } else {
-                        try {
-                            showError(response.json().error);
-                        } catch {
-                            showError(response.statusText);
-                        }
-                        
+                        showError(response.statusText);
                     }
                 });
             },500);

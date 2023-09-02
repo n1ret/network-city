@@ -43,6 +43,7 @@ body {
 }
 .loader.hide {
     opacity: 0;
+    animation: none;
 }
 
 @keyframes rotation {
