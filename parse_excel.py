@@ -47,7 +47,7 @@ def parse_table(school_class: str, excel_table: PathLike | bytes, db: DataBase):
                 except ValueError:
                     continue
 
-                users_marks[i] = Mark(int(date.timestamp()), mark)
+                users_marks[i].append(Mark(int(date.timestamp()), mark))
 
         db.insert_or_update_lesson(
             user_ids, lesson, (pickle.dumps(marks_list) for marks_list in users_marks)
