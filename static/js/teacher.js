@@ -51,6 +51,7 @@ document.body.onload=()=>{
                 });
             })
         });
+        $("#student-select").change();
         $(".loadercont").removeClass("hide");
     })
     $("#student-select").change((e)=>{
