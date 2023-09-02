@@ -85,7 +85,8 @@ class DataBase:
         self.con.commit()
 
     def init_database(self):
-        with open('tables.sql') as f:
+        tables_file = os.path.join(os.path.dirname(__file__), 'tables.sql')
+        with open(tables_file) as f:
             tables = f.read()
         for _ in self.q.execute(tables, multi=True): ...
         self._commit()
