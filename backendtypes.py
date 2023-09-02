@@ -85,7 +85,8 @@ class DataBase:
         self.con.commit()
 
     def init_database(self):
-        with open('tables.sql') as f:
+        tables_file = os.path.join(os.path.dirname(__file__), 'tables.sql')
+        with open(tables_file) as f:
             tables = f.read()
         for _ in self.q.execute(tables, multi=True): ...
         self._commit()
@@ -174,12 +175,14 @@ class DataBase:
         for user_fullname in user_fullnames:
             self.q.execute(
                 "SELECT uid FROM users WHERE fullname LIKE %s AND class = %s",
-                user_fullname, school_class
+                (user_fullname, school_class)
             )
             user_id = self.q.fetchone()
             if user_id is None:
                 user_id = self.insert_or_update_user(user_fullname, school_class)
-            user_ids.append(user_id[0])
+            else:
+                user_id = user_id[0]
+            user_ids.append(user_id)
         return user_ids
 
     def insert_or_update_lesson(self, user_ids: tuple[int], lesson: str, users_marks: Iterable[bytes]):
