@@ -161,6 +161,7 @@ class DataBase:
         self.q.execute("SELECT distinct class FROM users")
         ans=[]
         for classr in self.q.fetchall():
+            if classr[0]=="": continue
             ans.append(classr[0])
         ans.sort(key=lambda i:(int(i.split()[0]),i.split()[1]))
         return ans
