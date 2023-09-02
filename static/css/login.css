@@ -1,7 +1,7 @@
 html{
     height: 100%;
 }
-@media screen and (max-width: 2000px) {
+@media screen and (min-width: 2000px) {
     @-moz-document url-prefix() {
         html{
           -moz-transform: scale(2)!important;
