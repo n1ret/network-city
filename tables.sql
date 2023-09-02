@@ -12,5 +12,7 @@ CREATE TABLE IF NOT EXISTS users (
 CREATE TABLE IF NOT EXISTS users_lesson (
     user_id mediumint unsigned,
     lesson varchar(64),
-    marks blob
+    marks blob,
+
+    UNIQUE KEY (user_id, lesson)
 );
