@@ -68,6 +68,8 @@ input[type="file"]{
     font-size: .85em;
 }
 select{
+    font-size: 1em;
+    margin-left: 5px;
     background-color: #161616;
     color: white;
     border-radius: 5px;
