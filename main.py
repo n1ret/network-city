@@ -71,8 +71,8 @@ def login_required(f):
     return decorated_function
 
 @app.route("/api/login", methods=["POST"])
-@login_required
 def api_login():
+    if session["is_logged"]: return redirect("/")
     req = request.json
     if "login" not in req or "paswd" not in req:
         return make_response(
