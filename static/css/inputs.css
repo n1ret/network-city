@@ -51,6 +51,10 @@ input,input[type="file"]::file-selector-button {
     transition: border-color .3s;
     border: 2px solid #161616;
 }
+input[type="file"]::file-selector-button{
+    display: inline-block!important;
+    border: 1px solid #0a0a0a!important;
+}
 input:not([type="submit"]){
     background-color: transparent;
     padding: 5px 7px;
