@@ -142,9 +142,11 @@ tr th:first-of-type{
     z-index: 2;
     background: linear-gradient(90deg, rgba(10,10,10,1) 95%, rgba(10,10,10,0) 100%);
     padding-right: 5px;
-}
-tr th:first-of-type{
     text-align: left;
+}
+tr:first-of-type th:first-of-type{
+    font-weight: 700;
+    text-align: center;
 }
 tr:first-of-type th{
     border-bottom: 1px solid white;
