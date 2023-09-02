@@ -37,6 +37,14 @@ def make_session_permanent():
     if "is_logged" not in session:
         session["is_logged"] = False
         session.modified = True
+    else:
+        if session["is_logged"]:
+            with types.DataBase() as db:
+                usr=db.get_user_by_id(session["user_id"])
+            if not(usr):
+                return redirect("/logout")
+            if usr.password_hash!=session["password_hash"]:
+                return redirect("/logout")
 
 
 @app.route("/api/login", methods=["POST"])
@@ -58,14 +66,44 @@ def api_login():
     with types.DataBase() as db:
         usr = db.get_user_by_logpas(req["login"], req["paswd"])
     if not (usr):
-        return make_response(
-            jsonify({"ok": False, "error": "Неверный логин или пароль"}), 400
-        )
+        return jsonify({"ok": False, "error": "Неверный логин или пароль"})
 
     session["is_logged"] = True
     session["user_id"] = usr.uid
+    session["password_hash"] = usr.password_hash
     session.modified = True
     return jsonify({"ok": True, "error": ""})
+
+@app.route("/api/change_pass")
+def api_change_pass():
+    req = request.json
+    if "user_id" not in req or "old" not in req or "new" not in req:
+        return make_response(
+            jsonify({"ok": False, "error": "Ошибка в параметрах запроса"}), 400
+        )
+    
+    for pas in (req["old"],req["new"]):
+        match = re.match(
+            r"([a-fA-F\d]{32})", pas
+        )  # check if password is valid md5 string
+        if not (match) or match.group(0) != pas:
+            return make_response(
+                jsonify({"ok": False, "error": "Некорректный пароль"}), 400
+            )
+    
+    with types.DataBase() as db:
+        usr=db.get_user_by_id(req["user_id"])
+    
+    if not (usr):
+        return jsonify({"ok": False, "error": "Пользователь не найден"})
+    
+    if usr.password_hash!=req["old"]:
+        return jsonify({"ok": False, "error":"Неверный пароль"})
+    
+    with types.DataBase() as db:
+        db.update_user_password(req["user_id"], req["new"])
+    
+    return jsonify({"ok":True,"error":""})
 
 
 @app.route("/")

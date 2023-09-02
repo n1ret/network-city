@@ -78,13 +78,7 @@ class DataBase:
     def __exit__(self, exc_type, exc_val, exc_tb):
         self.close()
 
-    def _get_user(
-        self, login: str = "none", password_hash: str = "none", uid: int = -1
-    ):
-        self.q.execute(
-            "SELECT * FROM users WHERE (login = %s AND password_hash = %s) OR uid = %s",
-            (login, password_hash, uid),
-        )
+    def _get_user(self):
         res = self.q.fetchone()
         if not (res):
             return None
@@ -96,15 +90,20 @@ class DataBase:
         Returns:
             Optional[User]: None if user not found, otherwise User object
         """
-        return self._get_user(login, password_hash)
+        self.q.execute(
+            "SELECT * FROM users WHERE login = %s AND password_hash = %s",
+            (login, password_hash),
+        )
+        return self._get_user()
 
-    def get_user_by_id(self, user_id: int) -> User:
+    def get_user_by_id(self, user_id: int) -> Optional[User]:
         """Get User object using unique user id
 
         Returns:
-            User: User object
+            Optional[User]: None if user not found, otherwise User object
         """
-        return self._get_user(uid=user_id)
+        self.q.execute("SELECT * FROM users WHERE uid = %s", (user_id,))
+        return self._get_user()
 
     def get_user_lessons(self, user_id: int) -> List[UserLesson]:
         """Get list of UserLesson objects, containing info about lesson name and marks
@@ -118,3 +117,11 @@ class DataBase:
             userlesson = UserLesson(*userlessonraw)
             ans.append(userlesson)
         return ans
+
+    def update_user_password(self, user_id: int, new_password: str):
+        """Update user password_hash"""
+        self.q.execute(
+            "UPDATE users SET password_hash = %s WHERE uid = %s",
+            (new_password, user_id)
+        )
+        self.con.commit()
