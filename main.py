@@ -69,10 +69,9 @@ def main():
     if session.get("is_logged"):
         with types.DataBase() as db:
             usr = db.get_user_by_id(session.get("user_id"))
-            lessons = db.get_user_lessons(user_id)
-
-        if not (usr):
-            return redirect("/logout")
+            if not (usr):
+                return redirect("/logout")
+            lessons = db.get_user_lessons(usr.uid)
 
         ctx = utils.get_context(lessons)
         ctx.fullname = usr.fullname
