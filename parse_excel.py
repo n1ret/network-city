@@ -57,8 +57,9 @@ def parse_table(school_class: str, excel_table: PathLike | bytes, db: DataBase):
 
 
 def update_json(file_name):
-    if path.isfile(file_name):
-        with open(file_name) as f:
+    file_path = path.join(path.dirname(__file__), file_name)
+    if path.isfile(file_path):
+        with open(file_path) as f:
             data_json = load(f)
         if not isinstance(data_json, dict):
             data_json = {}
@@ -68,7 +69,7 @@ def update_json(file_name):
     data_json.update({
         'last_parse': time()
     })
-    with open(file_name, 'w') as f:
+    with open(file_path, 'w') as f:
         dump(
             data_json,
             f
