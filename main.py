@@ -11,7 +11,7 @@ import re
 from mysql.connector import connect
 import os
 from dotenv import load_dotenv
-import backendtypes as types
+import backendtypes as btypes
 import utils
 import sys
 
@@ -21,12 +21,11 @@ if os.path.exists(dotenv_path):
 
 app = Flask(
     "diary",
-    static_folder=os.path.join(sys.path, "static"),
-    template_folder=os.path.join(sys.path, "templates"),
+    static_folder=os.path.join(os.path.dirname(__file__), "static"),
+    template_folder=os.path.join(os.path.dirname(__file__), "templates"),
 )
 app.secret_key = os.environ.get("SECRET_KEY")
-
-app.debug = bool(os.environ.get("DEBUG_MODE"))
+app.debug = bool(int(os.environ.get("DEBUG_MODE")))
 if app.debug:
     app.templates_auto_reload = True
 
@@ -39,12 +38,14 @@ def make_session_permanent():
         session.modified = True
     else:
         if session["is_logged"]:
-            with types.DataBase() as db:
-                usr=db.get_user_by_id(session["user_id"])
-            if not(usr):
-                return redirect("/logout")
-            if usr.password_hash!=session["password_hash"]:
-                return redirect("/logout")
+            with btypes.DataBase() as db:
+                usr = db.get_user_by_id(session["user_id"])
+            if not (usr):
+                session.clear()
+                return redirect("/")
+            if usr.password_hash != session["password_hash"]:
+                session.clear()
+                return redirect("/")
 
 
 @app.route("/api/login", methods=["POST"])
@@ -63,7 +64,7 @@ def api_login():
             jsonify({"ok": False, "error": "Некорректный пароль"}), 400
         )
 
-    with types.DataBase() as db:
+    with btypes.DataBase() as db:
         usr = db.get_user_by_logpas(req["login"], req["paswd"])
     if not (usr):
         return jsonify({"ok": False, "error": "Неверный логин или пароль"})
@@ -74,15 +75,16 @@ def api_login():
     session.modified = True
     return jsonify({"ok": True, "error": ""})
 
-@app.route("/api/change_pass")
+
+@app.route("/api/change_pass", methods=["POST"])
 def api_change_pass():
     req = request.json
     if "user_id" not in req or "old" not in req or "new" not in req:
         return make_response(
             jsonify({"ok": False, "error": "Ошибка в параметрах запроса"}), 400
         )
-    
-    for pas in (req["old"],req["new"]):
+
+    for pas in (req["old"], req["new"]):
         match = re.match(
             r"([a-fA-F\d]{32})", pas
         )  # check if password is valid md5 string
@@ -90,26 +92,26 @@ def api_change_pass():
             return make_response(
                 jsonify({"ok": False, "error": "Некорректный пароль"}), 400
             )
-    
-    with types.DataBase() as db:
-        usr=db.get_user_by_id(req["user_id"])
-    
+
+    with btypes.DataBase() as db:
+        usr = db.get_user_by_id(req["user_id"])
+
     if not (usr):
         return jsonify({"ok": False, "error": "Пользователь не найден"})
-    
-    if usr.password_hash!=req["old"]:
-        return jsonify({"ok": False, "error":"Неверный пароль"})
-    
-    with types.DataBase() as db:
+
+    if usr.password_hash != req["old"]:
+        return jsonify({"ok": False, "error": "Неверный пароль"})
+
+    with btypes.DataBase() as db:
         db.update_user_password(req["user_id"], req["new"])
-    
-    return jsonify({"ok":True,"error":""})
+
+    return jsonify({"ok": True, "error": ""})
 
 
 @app.route("/")
 def main():
     if session.get("is_logged"):
-        with types.DataBase() as db:
+        with btypes.DataBase() as db:
             usr = db.get_user_by_id(session.get("user_id"))
             if not (usr):
                 return redirect("/logout")

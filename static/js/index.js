@@ -1,7 +1,11 @@
 function openModal(){
     $(".headercont").removeClass("opened");
-    $('.modalcont').removeClass('hide')
+    $('.modalcont').removeClass('hide');
 }
+$(window).on('popstate',()=>{
+    $('.modalcont').addClass('hide');
+    history.pushState(null, null, window.location.pathname);
+})
 document.body.onload=()=>{
     $(".menu").css("left",Math.max($(".header").width()-$(".menu").width()+5,0)+"px");
     
@@ -12,7 +16,7 @@ document.body.onload=()=>{
         $(".headercont").toggleClass("opened");
     });
 
-    $(document.body).click((e)=>{
+    $(window).click((e)=>{
         if($(".headercont").hasClass("opened")){
             if(!["menuitem","openmenu"].includes(e.target.className)){
                 $(".headercont").removeClass("opened");
@@ -66,5 +70,6 @@ document.body.onload=()=>{
         $("#chng > input[type='submit']").prop("disabled",true);
         $(".loadercont").removeClass("hide");
         $(".error").addClass("hide");
+        history.pushState(null, null, window.location.pathname);
     });
 }

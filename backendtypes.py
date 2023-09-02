@@ -2,7 +2,6 @@ from mysql import connector
 import pickle
 from dataclasses import dataclass, fields
 from typing import List, Union, Optional, DefaultDict, get_args
-import utils
 
 
 class SqlModel:
@@ -53,14 +52,16 @@ class UserLesson(SqlModel):
 class IndexPageContext:
     dates: List[str]
     lessons_names: List[str]
-    marks: DefaultDict[DefaultDict[str]]
+    marks: DefaultDict[str, DefaultDict[str, str]]
     user_id: int = 0
     fullname: str = ""
     last_update: str = ""
 
 
 class DataBase:
-    def __init__(self, host="127.0.0.1", database="", user="root", password="") -> None:
+    def __init__(
+        self, host="127.0.0.1", database="diary", user="root", password=""
+    ) -> None:
         self.con = connector.connect(
             user=user, password=password, host=host, database=database
         )
@@ -122,6 +123,6 @@ class DataBase:
         """Update user password_hash"""
         self.q.execute(
             "UPDATE users SET password_hash = %s WHERE uid = %s",
-            (new_password, user_id)
+            (new_password, user_id),
         )
         self.con.commit()

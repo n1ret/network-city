@@ -1,23 +1,24 @@
 import json
 import time
-from datetime import datetime
+from datetime import datetime, timezone, timedelta
 from typing import List, Union
-import backendtypes as types
+import backendtypes as btypes
 from collections import defaultdict
+import os
 
 
 def parse_timestamp(timestamp: Union[float, int], fmt: str = "%d.%m"):
-    t = datetime.fromtimestamp(timestamp)
+    t = datetime.fromtimestamp(timestamp, timezone(timedelta(hours=5)))
     return t.strftime(fmt)
 
 
 def get_last_parse_timestamp(fmt: str = "%d.%m %H:%M") -> str:
-    with open("data.json") as f:
+    with open(os.path.join(os.path.dirname(__file__), "data.json")) as f:
         data = json.loads(f.read())
     return parse_timestamp(data["last_parse"], fmt)
 
 
-def get_context(lessons: List[types.UserLesson]) -> types.IndexPageContext:
+def get_context(lessons: List[btypes.UserLesson]) -> btypes.IndexPageContext:
     dates = set()
     lessons_names = set()
     marks = defaultdict(lambda: defaultdict(str))  # marks[lesson_name][date]
@@ -27,4 +28,4 @@ def get_context(lessons: List[types.UserLesson]) -> types.IndexPageContext:
             date = parse_timestamp(mark.timestamp)
             dates.add(date)
             marks[lesson.lesson][date] = mark.mark
-    return types.IndexPageContext(dates, lessons_names, marks)
+    return btypes.IndexPageContext(dates, lessons_names, marks)
