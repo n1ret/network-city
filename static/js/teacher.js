@@ -46,7 +46,7 @@ document.body.onload=()=>{
             resp.json().then((res)=>{
                 $("#student-select").html("");
                 for(classm in res.class_students){
-                    $("#student-select").append(new Option(classm,classm));
+                    $("#student-select").append(new Option(classm[0],classm[1]));
                 }
             })
         });

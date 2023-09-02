@@ -8,11 +8,13 @@ from flask import (
     redirect,
 )
 import re
+
 # from mysql.connector import connect
 import os
 from dotenv import load_dotenv
 import backendtypes as btypes
 import utils
+
 # import sys
 
 dotenv_path = os.path.join(os.path.dirname(__file__), ".env")
@@ -41,10 +43,9 @@ def make_session_permanent():
             with btypes.DataBase() as db:
                 usr = db.get_user_by_id(session["user_id"])
             if (
-                not (usr) or
-                utils.get_md5(
-                    usr.password_hash, app.secret_key
-                ) != session["password_hash"]
+                not (usr)
+                or utils.get_md5(usr.password_hash, app.secret_key)
+                != session["password_hash"]
             ):
                 session.clear()
                 return redirect("/")
@@ -52,7 +53,8 @@ def make_session_permanent():
 
 @app.route("/api/login", methods=["POST"])
 def api_login():
-    if session["is_logged"]: return jsonify({"ok": True, "error": ""})
+    if session["is_logged"]:
+        return jsonify({"ok": True, "error": ""})
 
     req = request.json
     if "login" not in req or "paswd" not in req:
@@ -72,11 +74,11 @@ def api_login():
         usr = db.get_user_by_logpas(req["login"], req["paswd"])
     if not (usr):
         return jsonify({"ok": False, "error": "Неверный логин или пароль"})
-    
-    if usr.password_hash=="":
+
+    if usr.password_hash == "":
         with btypes.DataBase() as db:
             db.update_user_password(usr.uid, req["paswd"])
-        usr.password_hash=req["paswd"]
+        usr.password_hash = req["paswd"]
 
     session["is_logged"] = True
     session["user_id"] = usr.uid
@@ -87,7 +89,8 @@ def api_login():
 
 @app.route("/api/change_pass", methods=["POST"])
 def api_change_pass():
-    if not session["is_logged"]: return jsonify({"ok": True, "error": ""})
+    if not session["is_logged"]:
+        return jsonify({"ok": True, "error": ""})
 
     req = request.json
     if "user_id" not in req or "old" not in req or "new" not in req:
@@ -122,6 +125,19 @@ def api_change_pass():
     return jsonify({"ok": True, "error": ""})
 
 
+@app.route("/api/get_class_students")
+def api_get_class_students():
+    if not session["is_logged"]:
+        return jsonify({"ok": True, "error": ""})
+    with btypes.DataBase() as db:
+        if not (db.check_if_teacher(session["user_id"])):
+            return jsonify({"ok": False, "error": "Only for teachers"})
+        usrs=db.get_users_by_class(request.args.get("classr"))
+    ans=[]
+    for i in usrs:
+        ans.append([i.fullname,i.uid])
+    return jsonify({"ok":True,"class_students":ans})
+
 @app.route("/")
 def main():
     if session.get("is_logged"):
@@ -129,15 +145,25 @@ def main():
             usr = db.get_user_by_id(session.get("user_id"))
             if not (usr):
                 return redirect("/logout")
-            lessons = db.get_user_lessons(usr.uid)
+            if usr.is_teacher:
+                classes = db.get_all_classes()
+            else:
+                lessons = db.get_user_lessons(usr.uid)
+        if usr.is_teacher:
+            ctx = btypes.TeacherPageContext(classes)
+            ctx.fullname = usr.fullname
+            ctx.user_id = usr.uid
+            ctx.last_update = utils.get_last_parse_timestamp()
 
-        ctx = utils.get_context(lessons)
-        ctx.classr = usr.classr
-        ctx.fullname = usr.fullname
-        ctx.user_id = usr.uid
-        ctx.last_update = utils.get_last_parse_timestamp()
+            return render_template("teacher.html", ctx=ctx)
+        else:
+            ctx = utils.get_context(lessons)
+            ctx.classr = usr.classr
+            ctx.fullname = usr.fullname
+            ctx.user_id = usr.uid
+            ctx.last_update = utils.get_last_parse_timestamp()
 
-        return render_template("index.html", ctx=ctx)
+            return render_template("index.html", ctx=ctx)
     else:
         return render_template("login.html")
 

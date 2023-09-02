@@ -4,6 +4,7 @@ from dataclasses import dataclass, fields
 from typing import List, Union, Optional, DefaultDict, get_args, Iterable
 import os
 from dotenv import load_dotenv
+
 dotenv_path = os.path.join(os.path.dirname(__file__), ".env")
 if os.path.exists(dotenv_path):
     load_dotenv(dotenv_path)
@@ -66,12 +67,14 @@ class IndexPageContext:
     fullname: str = ""
     last_update: str = ""
 
+
 @dataclass
 class TeacherPageContext:
     classnames: List[str]
     user_id: int = 0
     fullname: str = ""
     last_update: str = ""
+
 
 class DataBase:
     def __init__(
@@ -91,10 +94,11 @@ class DataBase:
         self.con.commit()
 
     def init_database(self):
-        tables_file = os.path.join(os.path.dirname(__file__), 'tables.sql')
+        tables_file = os.path.join(os.path.dirname(__file__), "tables.sql")
         with open(tables_file) as f:
             tables = f.read()
-        for _ in self.q.execute(tables, multi=True): ...
+        for _ in self.q.execute(tables, multi=True):
+            ...
         self._commit()
 
     def _get_user(self):
@@ -145,9 +149,30 @@ class DataBase:
         )
         self.con.commit()
 
+    def get_users_by_class(self,classr)-> List[User]:
+        self.q.execute("SELECT * FROM users WHERE class = %s",(classr,))
+        ans=[]
+        for user in self.q.fetchall():
+            ans.append(User(*user))
+        return ans
+
+    def get_all_classes(self) -> List[str]:
+        self.q.execute("SELECT distinct class FROM users")
+        ans=[]
+        for classr in self.q.fetchall():
+            ans.append(classr[0])
+        return ans
+
+    def check_if_teacher(self, user_id) -> bool:
+        return self.get_user_by_id(user_id).is_teacher
+
     def insert_or_update_user(
-        self, fullname: str, school_class: str,
-        login: str = '', password_hash: str = '', is_teacher: bool = False
+        self,
+        fullname: str,
+        school_class: str,
+        login: str = "",
+        password_hash: str = "",
+        is_teacher: bool = False,
     ) -> int:
         """
         Raises:
@@ -156,10 +181,7 @@ class DataBase:
         Returns:
             int: inserted user id
         """
-        if (
-            not all((login, password_hash)) and
-            any((login, password_hash))
-        ):
+        if not all((login, password_hash)) and any((login, password_hash)):
             raise ValueError("Must be login and password_hash or no one of this")
         self.q.execute(
             """
@@ -168,20 +190,25 @@ class DataBase:
             ON DUPLICATE KEY UPDATE
             login=%(2)s, password_hash=%(3)s, is_teacher=%(4)s
             """,
-            {str(i): param for i, param in enumerate(
-                (fullname, school_class, login, password_hash, is_teacher)
-            )}
+            {
+                str(i): param
+                for i, param in enumerate(
+                    (fullname, school_class, login, password_hash, is_teacher)
+                )
+            },
         )
         self._commit()
         self.q.execute("SELECT LAST_INSERT_ID()")
         return self.q.fetchone()[0]
 
-    def convert_fullnames_to_user_ids(self, user_fullnames: tuple[str], school_class: str):
+    def convert_fullnames_to_user_ids(
+        self, user_fullnames: tuple[str], school_class: str
+    ):
         user_ids = []
         for user_fullname in user_fullnames:
             self.q.execute(
                 "SELECT uid FROM users WHERE fullname LIKE %s AND class = %s",
-                (user_fullname, school_class)
+                (user_fullname, school_class),
             )
             user_id = self.q.fetchone()
             if user_id is None:
@@ -191,13 +218,15 @@ class DataBase:
             user_ids.append(user_id)
         return user_ids
 
-    def insert_or_update_lesson(self, user_ids: tuple[int], lesson: str, users_marks: Iterable[bytes]):
+    def insert_or_update_lesson(
+        self, user_ids: tuple[int], lesson: str, users_marks: Iterable[bytes]
+    ):
         self.q.executemany(
             (
                 "INSERT INTO users_lesson(user_id, lesson, marks) VALUES(%s, %s, %s)"
                 "ON DUPLICATE KEY UPDATE marks=VALUES(marks)"
             ),
-            tuple(zip(user_ids, [lesson]*len(user_ids), users_marks))
+            tuple(zip(user_ids, [lesson] * len(user_ids), users_marks)),
         )
         self._commit()
 
