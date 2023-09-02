@@ -1,6 +1,6 @@
 import json
 from datetime import datetime, timezone, timedelta
-from typing import List, Union, Set
+from typing import List, Union
 from backendtypes import IndexPageContext, UserLesson
 from collections import defaultdict
 import os

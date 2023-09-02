@@ -1,7 +1,7 @@
 from mysql import connector
 import pickle
 from dataclasses import dataclass, fields
-from typing import List, Union, Optional, DefaultDict, get_args, Iterable
+from typing import List, Union, Optional, DefaultDict, get_args, Iterable, Set
 import os
 from dotenv import load_dotenv
 
