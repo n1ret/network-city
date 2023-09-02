@@ -112,7 +112,7 @@ tr {
 }
 tr th:first-of-type{
     position: sticky;
-    background-clip: padding-box;
+    background-clip: padding-box !important;
     left: 0px;
     z-index: 2;
     background: linear-gradient(90deg, rgba(10,10,10,1) 95%, rgba(10,10,10,0) 100%);
