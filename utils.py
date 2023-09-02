@@ -1,7 +1,7 @@
 import json
 from datetime import datetime, timezone, timedelta
 from typing import List, Union, Set
-import backendtypes as btypes
+from backendtypes import IndexPageContext, UserLesson
 from collections import defaultdict
 import os
 from hashlib import md5
@@ -22,18 +22,20 @@ def get_last_parse_timestamp(fmt: str = "%d.%m %H:%M") -> str:
         data = json.loads(f.read())
     return parse_timestamp(data["last_parse"], fmt)
 
-def generate_logins(logins: Set[str],fullnames: List[str]) -> List[str]:
-    result=[]
-    for name in fullnames:
-        while name in logins:
-            if name[-1].isdigit():
-                name=name[:-1]+str(int(name[-1])+1)
-            else:
-                name+="1"
-        result.append(name)
-    return result
 
-def get_context(lessons: List[btypes.UserLesson]) -> btypes.IndexPageContext:
+def next_available_login(logins: Set[str], fullname: str) -> str:
+    fname, lname = fullname.split()
+    name = fname + lname[0]
+    add = ""
+    while name + add in logins:
+        if add:
+            add = str(int(add) + 1)
+        else:
+            add = "1"
+    return name + add
+
+
+def get_context(lessons: List[UserLesson]) -> IndexPageContext:
     dates = set()
     lessons_names = set()
     marks = defaultdict(lambda: defaultdict(str))  # marks[lesson_name][date]
@@ -44,13 +46,13 @@ def get_context(lessons: List[btypes.UserLesson]) -> btypes.IndexPageContext:
             dates.add(date)
             marks[lesson.lesson][date] = mark.mark
         if len(marks[lesson.lesson]) == 0:
-            marks[lesson.lesson]["Ср. Балл"]=""
+            marks[lesson.lesson]["Ср. Балл"] = ""
         else:
-            vals=list(map(lambda i:i[1],marks[lesson.lesson].items()))
+            vals = list(map(lambda i: i[1], marks[lesson.lesson].items()))
             avg = sum(vals) / len(vals)
-            marks[lesson.lesson]["Ср. Балл"]="{:.2f}".format(avg)
-    lessons_names=sorted(list(lessons_names))
-    dates=list(dates)
+            marks[lesson.lesson]["Ср. Балл"] = "{:.2f}".format(avg)
+    lessons_names = sorted(list(lessons_names))
+    dates = list(dates)
     dates.sort(key=lambda date: datetime.strptime(date, "%d.%m"))
     dates.append("Ср. Балл")
-    return btypes.IndexPageContext(dates, lessons_names, marks)
+    return IndexPageContext(dates, lessons_names, marks)

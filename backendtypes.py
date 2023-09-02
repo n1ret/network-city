@@ -4,6 +4,7 @@ from dataclasses import dataclass, fields
 from typing import List, Union, Optional, DefaultDict, get_args, Iterable
 import os
 from dotenv import load_dotenv
+from utils import next_available_login
 
 dotenv_path = os.path.join(os.path.dirname(__file__), ".env")
 if os.path.exists(dotenv_path):
@@ -149,25 +150,23 @@ class DataBase:
         )
         self.con.commit()
 
-    def get_users_by_class(self,classr)-> List[User]:
-        self.q.execute("SELECT * FROM users WHERE class = %s",(classr,))
-        ans=[]
+    def get_users_by_class(self, classr) -> List[User]:
+        self.q.execute("SELECT * FROM users WHERE class = %s", (classr,))
+        ans = []
         for user in self.q.fetchall():
             ans.append(User(*user))
-        ans.sort(key=lambda i:i.fullname)
+        ans.sort(key=lambda i: i.fullname)
         return ans
 
     def get_all_classes(self) -> List[str]:
         self.q.execute("SELECT distinct class FROM users")
-        ans=[]
+        ans = []
         for classr in self.q.fetchall():
-            if classr[0]=="": continue
+            if classr[0] == "":
+                continue
             ans.append(classr[0])
-        ans.sort(key=lambda i:(int(i.split()[0]),i.split()[1]))
+        ans.sort(key=lambda i: (int(i.split()[0]), i.split()[1]))
         return ans
-
-    def check_if_teacher(self, user_id) -> bool:
-        return self.get_user_by_id(user_id).is_teacher
 
     def insert_or_update_user(
         self,
@@ -204,10 +203,15 @@ class DataBase:
         self.q.execute("SELECT LAST_INSERT_ID()")
         return self.q.fetchone()[0]
 
+    def get_used_logins():
+        self.q.execute("SELECT login FROM users")
+        return set(self.q.fetchall())
+
     def convert_fullnames_to_user_ids(
         self, user_fullnames: tuple[str], school_class: str
     ):
         user_ids = []
+        used_logins = self.get_used_logins()
         for user_fullname in user_fullnames:
             self.q.execute(
                 "SELECT uid FROM users WHERE fullname LIKE %s AND class = %s",
@@ -215,7 +219,10 @@ class DataBase:
             )
             user_id = self.q.fetchone()
             if user_id is None:
-                user_id = self.insert_or_update_user(user_fullname, school_class)
+                login = next_available_login(used_logins, user_fullname)
+                user_id = self.insert_or_update_user(
+                    user_fullname, school_class, login=login
+                )
             else:
                 user_id = user_id[0]
             user_ids.append(user_id)

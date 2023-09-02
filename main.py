@@ -26,7 +26,7 @@ app = Flask(
     static_folder=os.path.join(os.path.dirname(__file__), "static"),
     template_folder=os.path.join(os.path.dirname(__file__), "templates"),
 )
-app.config["uploads"]=os.path.join(os.path.dirname(__file__),"excel_files")
+app.config["uploads"] = os.path.join(os.path.dirname(__file__), "excel_files")
 app.secret_key = os.environ.get("SECRET_KEY")
 app.debug = bool(int(os.environ.get("DEBUG_MODE")))
 if app.debug:
@@ -51,28 +51,32 @@ def make_session_permanent():
                 session.clear()
                 return redirect("/")
 
+
 def teacher_required(f):
     @wraps(f)
-    def decorated_function(*args, **kwargs):
+    def func(*args, **kwargs):
         if not session["is_logged"]:
             return jsonify({"ok": True, "error": ""})
         with btypes.DataBase() as db:
-            if not (db.check_if_teacher(session["user_id"])):
+            if not (db.get_user_by_id(session["user_id"]).is_teacher):
                 return jsonify({"ok": False, "error": "Only for teachers"})
         return f(*args, **kwargs)
-    return decorated_function
+    return func
+
 
 def login_required(f):
     @wraps(f)
-    def decorated_function(*args, **kwargs):
+    def func(*args, **kwargs):
         if not session["is_logged"]:
             return jsonify({"ok": True, "error": ""})
         return f(*args, **kwargs)
-    return decorated_function
+    return func
+
 
 @app.route("/api/login", methods=["POST"])
 def api_login():
-    if session["is_logged"]: return redirect("/")
+    if session["is_logged"]:
+        return redirect("/")
     req = request.json
     if "login" not in req or "paswd" not in req:
         return make_response(
@@ -142,38 +146,42 @@ def api_change_pass():
 
     return jsonify({"ok": True, "error": ""})
 
+
 @app.route("/api/get_class_students")
 @teacher_required
 def api_get_class_students():
     with btypes.DataBase() as db:
-        usrs=db.get_users_by_class(request.args.get("classr"))
-    ans=[]
+        usrs = db.get_users_by_class(request.args.get("classr"))
+    ans = []
     for i in usrs:
-        ans.append([i.fullname,i.uid])
-    return jsonify({"ok":True,"class_students":ans})
+        ans.append([i.fullname, i.uid])
+    return jsonify({"ok": True, "class_students": ans})
+
 
 @app.route("/api/get_student_marks")
 @teacher_required
 def api_get_student_marks():
     with btypes.DataBase() as db:
-        lessons=db.get_user_lessons(request.args.get("student"))
+        lessons = db.get_user_lessons(request.args.get("student"))
     ctx = utils.get_context(lessons)
-    return render_template("marks.html",ctx=ctx)
+    return render_template("marks.html", ctx=ctx)
+
 
 @app.route("/api/update_marks", methods=["POST"])
 @teacher_required
 def api_update_marks():
-    classr=request.form.get("class")
-    filer=request.files.get("file")
-    filepath=os.path.join(app.config["uploads"], str(uuid4())+".xlsx")
+    classr = request.form.get("class")
+    filer = request.files.get("file")
+    filepath = os.path.join(app.config["uploads"], str(uuid4()) + ".xlsx")
     filer.save(filepath)
     with btypes.DataBase() as db:
         try:
             parse_table(classr, filepath, db)
         except Exception as e:
-            return jsonify({"ok":False,"error":str(e)})
+            return jsonify({"ok": False, "error": str(e)})
     os.remove(filepath)
-    return jsonify({"ok":True,"error":""})
+    return jsonify({"ok": True, "error": ""})
+
 
 @app.route("/")
 def main():
