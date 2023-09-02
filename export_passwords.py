@@ -33,7 +33,7 @@ doc=Document()
 
 j=len(classes)-1
 
-for i,(classr,logins) in enumerate(zip(classes,logins_bcls)):
+for ind,(classr,logins) in enumerate(zip(classes,logins_bcls)):
     doc.add_heading(classr,1)
     doc.add_paragraph("diary130.ru")
     table = doc.add_table(rows=1, cols=2)
@@ -47,7 +47,7 @@ for i,(classr,logins) in enumerate(zip(classes,logins_bcls)):
         row[0].text = login
         row[1].text = get_default_password(login)
     table.style="Table Grid"
-    if i<j:
+    if ind<j:
         doc.add_page_break()
 
 sections = doc.sections
