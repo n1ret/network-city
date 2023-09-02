@@ -164,3 +164,6 @@ cython_debug/
 
 # Private files
 *.xlsx
+
+# Data files
+data.json
