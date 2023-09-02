@@ -1,5 +1,4 @@
 import json
-import time
 from datetime import datetime, timezone, timedelta
 from typing import List, Union
 import backendtypes as btypes
@@ -7,9 +6,11 @@ from collections import defaultdict
 import os
 from hashlib import md5
 
+
 def get_md5(*args) -> str:
-    s="".join(map(str,args))
+    s = "".join(map(str, args))
     return md5(s.encode()).hexdigest()
+
 
 def parse_timestamp(timestamp: Union[float, int], fmt: str = "%d.%m"):
     t = datetime.fromtimestamp(timestamp, timezone(timedelta(hours=5)))
