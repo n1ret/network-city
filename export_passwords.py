@@ -31,7 +31,7 @@ with DataBase() as db:
 
 doc=Document()
 
-j=len(classes)-1
+j=len(classes)
 
 for i,(classr,logins) in enumerate(zip(classes,logins_bcls)):
     doc.add_heading(classr,1)
