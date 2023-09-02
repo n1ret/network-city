@@ -154,6 +154,7 @@ class DataBase:
         ans=[]
         for user in self.q.fetchall():
             ans.append(User(*user))
+        ans.sort(key=lambda i:i.fullname)
         return ans
 
     def get_all_classes(self) -> List[str]:
@@ -161,6 +162,7 @@ class DataBase:
         ans=[]
         for classr in self.q.fetchall():
             ans.append(classr[0])
+        ans.sort(key=lambda i:(int(i.split()[0]),i.split()[1]))
         return ans
 
     def check_if_teacher(self, user_id) -> bool:
