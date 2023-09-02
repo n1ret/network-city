@@ -72,12 +72,12 @@ document.body.onload=()=>{
     
     $("#updinfo").submit(e=>{
         e.preventDefault();
-        const req = {
-            class:$("#class-select2").val()
-        }
-        fetch('/api/get_student_marks?'+ new URLSearchParams(req),{
+        const req = new FormData();
+        req.append("class",$("#class-select2").val());
+        req.append("file",$('#inpfile').prop('files')[0]);
+        fetch('/api/update_marks?'+ new URLSearchParams(req),{
             method:'POST',
-            body: $('#inpfile').prop('files')[0]
+            body: req
         })
         .then((resp)=>{
             $(".loadercont").addClass("hide");

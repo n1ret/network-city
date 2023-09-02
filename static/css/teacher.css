@@ -81,6 +81,9 @@ select {
     flex-basis: 50%;
     gap: 5px;
 }
+#viewinfo {
+    margin: 15px 0;
+}
 input[type="submit"]{
     width: auto!important;
     padding: 5px 7px!important;
