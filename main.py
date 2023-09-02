@@ -40,10 +40,11 @@ def make_session_permanent():
         if session["is_logged"]:
             with btypes.DataBase() as db:
                 usr = db.get_user_by_id(session["user_id"])
-            if not (usr):
-                session.clear()
-                return redirect("/")
-            if usr.password_hash != session["password_hash"]:
+            if (
+                not (usr)
+                or utils.get_md5(usr.password_hash, app.secret_key)
+                != session["password_hash"]
+            ):
                 session.clear()
                 return redirect("/")
 
@@ -71,7 +72,7 @@ def api_login():
 
     session["is_logged"] = True
     session["user_id"] = usr.uid
-    session["password_hash"] = usr.password_hash
+    session["password_hash"] = utils.get_md5(usr.password_hash, app.secret_key)
     session.modified = True
     return jsonify({"ok": True, "error": ""})
 
@@ -105,8 +106,8 @@ def api_change_pass():
     with btypes.DataBase() as db:
         db.update_user_password(req["user_id"], req["new"])
 
-    session["password_hash"]=req["new"]
-    session.modified=True
+    session["password_hash"] = utils.get_md5(req["new"], app.secret_key)
+    session.modified = True
 
     return jsonify({"ok": True, "error": ""})
 
