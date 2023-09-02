@@ -26,8 +26,8 @@
             <a class="title">Смена пароля</a>
             <a class="error hide"></a>
             <form id="chng">
-                <input type="password" placeholder="Старый пароль" id="old_val">
-                <input type="password" placeholder="Новый пароль" id="new_val">
+                <input type="password" placeholder="Старый пароль" id="old_val" required>
+                <input type="password" placeholder="Новый пароль" id="new_val" required>
                 <input type="submit" value="Изменить">
             </form>
         </div>
@@ -47,13 +47,13 @@
                     <a class="smalltitle">Обновить информацию</a>
                     <div>
                         <label for="class">Класс: </label>
-                        <select name="class" id="class-select2">
+                        <select name="class" id="class-select2" required>
                             {% for class in ctx.classnames %}
                             <option value="{{ class }}">{{ class }}</option>
                             {% endfor %}
                         </select>
                     </div>
-                    <input type="file" accept=".xlsx,.xls" id="inpfile">
+                    <input type="file" accept=".xlsx,.xls" id="inpfile" required>
                     <input type="submit" value="Обновить">
                 </form>
             </div>
@@ -62,7 +62,7 @@
                     <a class="smalltitle">Получить информацию</a>
                     <div>
                         <label for="class">Класс: </label>
-                        <select name="class" id="class-select">
+                        <select name="class" id="class-select" required>
                             {% for class in ctx.classnames %}
                             <option value="{{ class }}">{{ class }}</option>
                             {% endfor %}
@@ -70,7 +70,7 @@
                     </div>
                     <div>
                         <label for="student">Ученик: </label>
-                        <select name="student" id="student-select">
+                        <select name="student" id="student-select" required>
                         </select>
                     </div>
                     <input type="submit" value="Получить">
