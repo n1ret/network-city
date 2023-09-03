@@ -31,7 +31,7 @@ with DataBase() as db:
     if args.teachers:
         classes=["Классные руководители"]
         db.q.execute("SELECT login FROM users WHERE is_teacher = 1")
-        logins_bcls=[lgn[0] for lgn in db.q.fetchall()]
+        logins_bcls=[[lgn for lgn, in db.q.fetchall()]]
     else:
         classes = db.get_all_classes()
         logins_bcls = []
