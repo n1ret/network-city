@@ -224,7 +224,7 @@ class DataBase:
 
     def get_used_logins(self):
         self.q.execute("SELECT login FROM users")
-        return set(self.q.fetchall())
+        return set([lgn for lgn, in self.q.fetchall()])
 
     def convert_fullnames_to_user_ids(
         self, user_fullnames: tuple[str], school_class: str

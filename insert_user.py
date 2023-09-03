@@ -16,7 +16,7 @@ with DataBase() as db:
     login = next_available_login(used_logins, fullname)
     password_hash = get_default_password_hash(login)
     uid = db.insert_or_update_user(
-        fullname, args.school_class, login, password_hash, parser.teacher
+        fullname, args.school_class, login, password_hash, args.teacher
     )
 
 print(f"Created user #{uid}\n Fullname: {fullname}\n Login: {login}\n Password: {get_default_password(login)}")
