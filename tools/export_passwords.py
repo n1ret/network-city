@@ -7,7 +7,7 @@ import dotenv
 import os
 import sys
 
-dotenv.load_dotenv(".env")
+dotenv.load_dotenv("../.env")
 parser = argparse.ArgumentParser(
     prog="python3 export_passwords.py",
     description="Export default passwords using hash of logins and sends word file using telegram bot",
