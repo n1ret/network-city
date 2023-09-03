@@ -32,7 +32,7 @@ if app.debug:
 
 
 @app.before_request
-def make_session_permanent():
+def before_request():
     session.permanent = True
     if "is_logged" not in session:
         session["is_logged"] = False
@@ -104,9 +104,6 @@ def api_login():
 @app.route("/api/change_pass", methods=["POST"])
 @login_required
 def api_change_pass():
-    if not session["is_logged"]:
-        return jsonify({"ok": True, "error": ""})
-
     req = request.json
     if "user_id" not in req or "old" not in req or "new" not in req:
         return make_response(
@@ -193,7 +190,7 @@ def main():
         ctx.fullname = usr.fullname
         ctx.user_id = usr.uid
         ctx.last_update = utils.get_last_parse_timestamp()
-        
+
         if usr.is_teacher:
             return render_template("teacher.html", ctx=ctx)
         else:
