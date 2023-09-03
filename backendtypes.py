@@ -78,7 +78,7 @@ class TeacherPageContext:
     classr: str = ""
 
 def get_default_password_hash(login: str) -> str:
-    password=md5(login.encode()).hexdigest()[:10]
+    password=md5(login.encode()).hexdigest()[:6]
     hash=md5(password.encode()).hexdigest()
     return hash
 

@@ -22,7 +22,7 @@ args = parser.parse_args()
 
 
 def get_default_password(login):
-    return md5(login.encode()).hexdigest()[:10]
+    return md5(login.encode()).hexdigest()[:6]
 
 
 from backendtypes import DataBase
