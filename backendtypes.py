@@ -134,7 +134,7 @@ class DataBase:
             Optional[User]: None if user not found, otherwise User object
         """
         self.q.execute(
-            "SELECT * FROM users WHERE login = %s AND (password_hash = %s OR password_hash = '')",
+            "SELECT * FROM users WHERE login = BINARY %s AND password_hash = %s",
             (login, password_hash),
         )
         return self._get_user()
