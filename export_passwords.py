@@ -16,6 +16,7 @@ parser.add_argument("-f", "--filename", default="passwords.docx")
 parser.add_argument("-u", "--userid", default=os.environ.get("EXPORT_USER_ID"))
 parser.add_argument("-b", "--bottoken", default=os.environ.get("EXPORT_BOT_TOKEN"))
 parser.add_argument("-s", "--saveonly", action="store_true")
+parser.add_argument("-t", "--teachers", action="store_true")
 
 args = parser.parse_args()
 
@@ -27,11 +28,16 @@ def get_default_password(login):
 from backendtypes import DataBase
 
 with DataBase() as db:
-    classes = db.get_all_classes()
-    logins_bcls = []
-    for classr in classes:
-        users = db.get_users_by_class(classr)
-        logins_bcls.append([user.login for user in users])
+    if args.teachersonly:
+        classes=["Классные руководители"]
+        db.q.execute("SELECT login FROM users WHERE is_teacher = 1")
+        logins_bcls=[lgn[0] for lgn in db.q.fetchall()]
+    else:
+        classes = db.get_all_classes()
+        logins_bcls = []
+        for classr in classes:
+            users = db.get_users_by_class(classr)
+            logins_bcls.append([user.login for user in users])
 
 doc = Document()
 
