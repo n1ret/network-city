@@ -5,6 +5,7 @@ import requests as rq
 import argparse
 import dotenv
 import os
+from backendtypes import get_default_password
 
 dotenv.load_dotenv(".env")
 parser = argparse.ArgumentParser(
@@ -19,10 +20,6 @@ parser.add_argument("-s", "--saveonly", action="store_true")
 parser.add_argument("-t", "--teachers", action="store_true")
 
 args = parser.parse_args()
-
-
-def get_default_password(login):
-    return md5(login.encode()).hexdigest()[:6]
 
 
 from backendtypes import DataBase
