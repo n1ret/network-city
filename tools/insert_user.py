@@ -1,5 +1,8 @@
-from backendtypes import DataBase, get_default_password_hash, get_default_password, next_available_login
 import argparse
+import sys
+
+sys.path.append("..")
+from backendtypes import DataBase, get_default_password_hash, get_default_password, next_available_login
 
 parser = argparse.ArgumentParser(prog="python3 insert_user.py")
 

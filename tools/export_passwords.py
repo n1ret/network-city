@@ -5,7 +5,7 @@ import requests as rq
 import argparse
 import dotenv
 import os
-from backendtypes import get_default_password
+import sys
 
 dotenv.load_dotenv(".env")
 parser = argparse.ArgumentParser(
@@ -21,8 +21,8 @@ parser.add_argument("-t", "--teachers", action="store_true")
 
 args = parser.parse_args()
 
-
-from backendtypes import DataBase
+sys.path.append("..")
+from backendtypes import DataBase, get_default_password
 
 with DataBase() as db:
     if args.teachers:
