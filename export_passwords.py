@@ -28,7 +28,7 @@ def get_default_password(login):
 from backendtypes import DataBase
 
 with DataBase() as db:
-    if args.teachersonly:
+    if args.teachers:
         classes=["Классные руководители"]
         db.q.execute("SELECT login FROM users WHERE is_teacher = 1")
         logins_bcls=[lgn[0] for lgn in db.q.fetchall()]
