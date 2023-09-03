@@ -75,6 +75,7 @@ class TeacherPageContext:
     user_id: int = 0
     fullname: str = ""
     last_update: str = ""
+    classr: str = ""
 
 def get_default_password_hash(login: str) -> str:
     password=md5(login.encode()).hexdigest()[:10]
@@ -166,7 +167,7 @@ class DataBase:
         self.con.commit()
 
     def get_users_by_class(self, classr) -> List[User]:
-        self.q.execute("SELECT * FROM users WHERE class = %s", (classr,))
+        self.q.execute("SELECT * FROM users WHERE class = %s AND is_teacher = 0", (classr,))
         ans = []
         for user in self.q.fetchall():
             ans.append(User(*user))

@@ -49,7 +49,7 @@
                         <label for="class">Класс: </label>
                         <select name="class" id="class-select2" required>
                             {% for class in ctx.classnames %}
-                            <option value="{{ class }}">{{ class }}</option>
+                            <option value="{{ class }}" {% if ctx.classr == class %}selected{% endif %}>{{ class }}</option>
                             {% endfor %}
                         </select>
                     </div>
@@ -64,7 +64,7 @@
                         <label for="class">Класс: </label>
                         <select name="class" id="class-select" required>
                             {% for class in ctx.classnames %}
-                            <option value="{{ class }}">{{ class }}</option>
+                            <option value="{{ class }}" {% if ctx.classr == class %}selected{% endif %}>{{ class }}</option>
                             {% endfor %}
                         </select>
                     </div>

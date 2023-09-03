@@ -186,18 +186,17 @@ def main():
                 lessons = db.get_user_lessons(usr.uid)
         if usr.is_teacher:
             ctx = btypes.TeacherPageContext(classes)
-            ctx.fullname = usr.fullname
-            ctx.user_id = usr.uid
-            ctx.last_update = utils.get_last_parse_timestamp()
-
-            return render_template("teacher.html", ctx=ctx)
         else:
             ctx = utils.get_context(lessons)
-            ctx.classr = usr.classr
-            ctx.fullname = usr.fullname
-            ctx.user_id = usr.uid
-            ctx.last_update = utils.get_last_parse_timestamp()
-
+        
+        ctx.classr = usr.classr
+        ctx.fullname = usr.fullname
+        ctx.user_id = usr.uid
+        ctx.last_update = utils.get_last_parse_timestamp()
+        
+        if usr.is_teacher:
+            return render_template("teacher.html", ctx=ctx)
+        else:
             return render_template("index.html", ctx=ctx)
     else:
         return render_template("login.html")
