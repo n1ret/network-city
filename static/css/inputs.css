@@ -98,6 +98,7 @@ input[type="submit"]:hover,input[type="submit"]:focus,
 input[type="file"]::file-selector-button:hover,input[type="file"]::file-selector-button:focus{
     background-color: #212121;
 }
+input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus {
   -webkit-text-fill-color: white;
