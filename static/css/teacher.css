@@ -177,6 +177,13 @@ tr:first-of-type th:first-of-type{
 tr:first-of-type th{
     border-bottom: 1px solid white;
 }
+tr:first-of-type th:last-of-type{
+    font-weight: 700;
+    font-size: .8em;
+}
+tr td:last-of-type{
+    font-weight: 600;
+}
 .cont{
     width: 100%;
     max-width: 600px;
