@@ -39,7 +39,7 @@ document.body.onload=()=>{
     }
 
     $("#class-select").change((e)=>{
-        $("#viewinfo").html("");
+        simpleBar.getContentElement().innerHTML = "";
         fetch('/api/get_class_students?'+ new URLSearchParams({
             classr: e.target.value
         })).then((resp)=>{
@@ -51,14 +51,14 @@ document.body.onload=()=>{
                 });
             })
         });
-        $("#student-select").change();
         $(".loadercont").removeClass("hide");
     })
     $("#student-select").change((e)=>{
-        $("#viewinfo").html("");
+        simpleBar.getContentElement().innerHTML = "";
     });
     $("#class-select").change();
 
+    const simpleBar = new SimpleBar($("#viewinfo").get(0));
     $("#getinfo").submit(e=>{
         e.preventDefault();
         const req={
@@ -69,7 +69,8 @@ document.body.onload=()=>{
         .then((resp)=>{
             $(".loadercont").addClass("hide");
             resp.text().then((res)=>{
-                $("#viewinfo").html(res);
+                simpleBar.getContentElement().innerHTML = res;
+                simpleBar.recalculate();
             })
         });
         $(".loadercont").removeClass("hide");
