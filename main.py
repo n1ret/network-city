@@ -54,7 +54,7 @@ def teacher_required(f):
     @wraps(f)
     def func(*args, **kwargs):
         if not session["is_logged"]:
-            return jsonify({"ok": True, "error": ""})
+            return jsonify({"ok": False, "error": "Not logged in"})
         with btypes.DataBase() as db:
             if not (db.get_user_by_id(session["user_id"]).is_teacher):
                 return jsonify({"ok": False, "error": "Only for teachers"})
@@ -66,7 +66,7 @@ def login_required(f):
     @wraps(f)
     def func(*args, **kwargs):
         if not session["is_logged"]:
-            return jsonify({"ok": True, "error": ""})
+            return jsonify({"ok": False, "error": "Not logged in"})
         return f(*args, **kwargs)
     return func
 
