@@ -37,6 +37,8 @@ document.body.onload=()=>{
         $(".error").removeClass("hide");
         $(".loadercont").addClass("hide");
     }
+    
+    const simpleBar = new SimpleBar($("#viewinfo").get(0));
 
     $("#class-select").change((e)=>{
         simpleBar.getContentElement().innerHTML = "";
@@ -58,7 +60,6 @@ document.body.onload=()=>{
     });
     $("#class-select").change();
 
-    const simpleBar = new SimpleBar($("#viewinfo").get(0));
     $("#getinfo").submit(e=>{
         e.preventDefault();
         const req={
