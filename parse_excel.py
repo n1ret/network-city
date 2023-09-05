@@ -54,6 +54,7 @@ def parse_table(school_class: str, excel_table: PathLike | bytes, db: DataBase):
             if not isinstance(date, datetime):
                 raise TypeError(f"Firts row must contain datetime.datetime, founded: {type(date)}")
             for i, mark in enumerate(column[1:]):
+                if i > len(fullnames)-1: break
                 if mark is nan:
                     continue
                 if str(mark).isdigit():
