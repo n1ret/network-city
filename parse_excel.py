@@ -29,7 +29,7 @@ def parse_table(school_class: str, excel_table: PathLike | bytes, db: DataBase):
             raise ValueError(f"No columns found on sheet {lesson}")
         
         df[0].replace('', nan, inplace=True)
-        df = df.dropna(subset=[0])   
+        df.dropna(subset=[0], inplace=True)
 
         end=0
         for row in df.index:
@@ -40,6 +40,8 @@ def parse_table(school_class: str, excel_table: PathLike | bytes, db: DataBase):
             raise ValueError("'Тема урока' not found")
         
         fullnames = [str(name).split(".", 1)[-1].strip() for name in df[0][1:end]]
+        raise Exception(str(fullnames))
+        
         if len(fullnames)==0:
             continue
         user_ids = db.convert_fullnames_to_user_ids(fullnames, school_class)
