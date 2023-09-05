@@ -235,6 +235,7 @@ class DataBase:
         user_ids = []
         used_logins = self.get_used_logins()
         for user_fullname in user_fullnames:
+            user_fullname=" ".join(user_fullname.split()[:2])
             self.q.execute(
                 "SELECT uid FROM users WHERE fullname LIKE %s AND class = %s",
                 (user_fullname, school_class),
