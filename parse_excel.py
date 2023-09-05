@@ -30,11 +30,11 @@ def parse_table(school_class: str, excel_table: PathLike | bytes, db: DataBase):
 
         end=0
         for row in df.index:
-            if df[0][row]=="Темы уроков":
+            if df[0][row]=="Тема урока":
                 end=row-1
                 break
         if end==0:
-            raise ValueError("'Темы уроков' not found")
+            raise ValueError("'Тема урока' not found")
         
         fullnames = [str(name).split(".", 1)[-1].strip() for name in df[0][1:end] if name is not nan]
         user_ids = db.convert_fullnames_to_user_ids(fullnames, school_class)
