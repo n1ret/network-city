@@ -24,6 +24,7 @@ def parse_table(school_class: str, excel_table: PathLike | bytes, db: DataBase):
     sheets = pd.read_excel(excel_table, None, header=None)
     for lesson in sheets.keys():
         df = sheets.get(lesson, None)
+        df = df.dropna(subset=[0])
 
         if len(df.columns) == 0:
             raise ValueError(f"No columns found on sheet {lesson}")
@@ -37,12 +38,11 @@ def parse_table(school_class: str, excel_table: PathLike | bytes, db: DataBase):
             raise ValueError("'Тема урока' not found")
         
         fullnames = [str(name).split(".", 1)[-1].strip() for name in df[0][1:end]]
-        fullnames1 = [name for name in fullnames if name is not nan and name != ""]
-
-        if len(fullnames1)==0:
+        if len(fullnames)==0:
             continue
+        user_ids = db.convert_fullnames_to_user_ids(fullnames, school_class)
 
-        users_marks = [[] for _ in range(len(fullnames1))]
+        users_marks = [[] for _ in range(len(fullnames))]
         marks = df.loc[:end, 1:]
         for ind, (_, column) in enumerate(marks.items()):
             date = column[0]
@@ -50,11 +50,7 @@ def parse_table(school_class: str, excel_table: PathLike | bytes, db: DataBase):
                 break
             if not isinstance(date, datetime):
                 raise TypeError(f"Firts row must contain datetime.datetime, founded: {type(date)}")
-            j=0
-            for i, mark in enumerate(column[1:end]):
-                if fullnames[i]=="":
-                    continue
-                j+=1
+            for i, mark in enumerate(column[1:]):
                 if mark is nan:
                     continue
                 if str(mark).isdigit():
@@ -62,9 +58,7 @@ def parse_table(school_class: str, excel_table: PathLike | bytes, db: DataBase):
                 else:
                     mark = str(mark).upper()
 
-                users_marks[j].append(Mark(int(date.timestamp()), mark))
-
-        user_ids = db.convert_fullnames_to_user_ids(fullnames1, school_class)
+                users_marks[i].append(Mark(int(date.timestamp()), mark))
 
         db.insert_or_update_lesson(
             user_ids, lesson, (pickle.dumps(marks_list) for marks_list in users_marks)
