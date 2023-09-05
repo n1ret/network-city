@@ -36,8 +36,8 @@ def parse_table(school_class: str, excel_table: PathLike | bytes, db: DataBase):
         if end==0:
             raise ValueError("'Тема урока' not found")
         
-        fullnames = [str(name).split(".", 1)[-1].strip() for name in df[0][1:end] if name is not nan]
-        fullnames1 = [name for name in fullnames if name != ""]
+        fullnames = [str(name).split(".", 1)[-1].strip() for name in df[0][1:end]]
+        fullnames1 = [name for name in fullnames if name is not nan and name != ""]
 
         if len(fullnames1)==0:
             continue
@@ -51,7 +51,7 @@ def parse_table(school_class: str, excel_table: PathLike | bytes, db: DataBase):
             if not isinstance(date, datetime):
                 raise TypeError(f"Firts row must contain datetime.datetime, founded: {type(date)}")
             j=0
-            for i, mark in enumerate(column[1:]):
+            for i, mark in enumerate(column[1:end]):
                 if fullnames[i]=="":
                     continue
                 j+=1
