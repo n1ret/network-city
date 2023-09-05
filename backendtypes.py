@@ -48,7 +48,7 @@ class User(SqlModel):
 @dataclass
 class Mark:
     timestamp: int
-    mark: int
+    mark: Union[int, str]
 
 
 @dataclass

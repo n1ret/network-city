@@ -27,25 +27,31 @@ def parse_table(school_class: str, excel_table: PathLike | bytes, db: DataBase):
 
         if len(df.columns) == 0:
             raise ValueError(f"No columns found on sheet {lesson}")
-        if len(df.index) < 40:
-            raise ValueError(f"Not all raws on sheet {lesson}")
 
-        fullnames = [name for name in df[0][1:39] if name is not nan]
+        end=0
+        for row in df.index:
+            if df[0][row]=="Темы уроков":
+                end=row-1
+                break
+        if end==0:
+            raise ValueError("'Темы уроков' not found")
+        
+        fullnames = [str(name).split(".", 1)[-1].strip() for name in df[0][1:end] if name is not nan]
         user_ids = db.convert_fullnames_to_user_ids(fullnames, school_class)
 
         users_marks = [[] for _ in range(len(fullnames))]
-        marks = df.loc[:38, 1:]
+        marks = df.loc[:end, 1:]
         for _, column in marks.items():
             date = column[0]
             if not isinstance(date, datetime):
-                raise TypeError(f"Firts raw must contain datetime.datetime, founded: {type(date)}")
+                raise TypeError(f"Firts row must contain datetime.datetime, founded: {type(date)}")
             for i, mark in enumerate(column[1:]):
                 if mark is nan:
                     continue
-                try:
+                if str(mark).isdigit():
                     mark = int(mark)
-                except ValueError:
-                    continue
+                else:
+                    mark = str(mark).upper()
 
                 users_marks[i].append(Mark(int(date.timestamp()), mark))
 
