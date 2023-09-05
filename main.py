@@ -14,6 +14,7 @@ import backendtypes as btypes
 import utils
 from parse_excel import parse_table
 from functools import wraps
+import traceback
 
 
 dotenv_path = os.path.join(os.path.dirname(__file__), ".env")
@@ -166,7 +167,7 @@ def api_update_marks():
         try:
             parse_table(classr, file, db)
         except Exception as e:
-            return jsonify({"ok": False, "error": str(e)})
+            return jsonify({"ok": False, "error": traceback.format_exc()})
     return jsonify({"ok": True, "error": ""})
 
 
