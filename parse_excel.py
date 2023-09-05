@@ -31,12 +31,12 @@ def parse_table(school_class: str, excel_table: PathLike | bytes, db: DataBase):
         df[0].replace('', nan, inplace=True)
         df.dropna(subset=[0], inplace=True,ignore_index=True)
 
-        end=0
+        end=-1
         for row in df.index:
-            if df[0][row]=="Тема урока":
+            if df[0][row].lower().strip()=="тема урока":
                 end=row-1
                 break
-        if end==0:
+        if end==-1:
             raise ValueError("'Тема урока' not found")
         
         fullnames = [str(name).split(".", 1)[-1].strip() for name in df[0][1:end]]
