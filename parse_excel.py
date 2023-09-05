@@ -24,11 +24,11 @@ def parse_table(school_class: str, excel_table: PathLike | bytes, db: DataBase):
     sheets = pd.read_excel(excel_table, None, header=None)
     for lesson in sheets.keys():
         df = sheets.get(lesson, None)
-        
+
         if len(df.columns) == 0:
             raise ValueError(f"No columns found on sheet {lesson}")
         
-        df[0].replace('', np.nan, inplace=True)
+        df[0].replace('', nan, inplace=True)
         df = df.dropna(subset=[0])   
 
         end=0
