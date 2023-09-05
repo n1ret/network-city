@@ -33,7 +33,10 @@ def get_context(lessons: List[UserLesson]) -> IndexPageContext:
         for mark in lesson.marks:
             date = parse_timestamp(mark.timestamp)
             dates.add(date)
-            marks[lesson.lesson][date] = mark.mark
+            if marks[lesson.lesson][date]=="":
+                marks[lesson.lesson][date] = str(mark.mark)
+            else:
+                marks[lesson.lesson][date] += " "+str(mark.mark)
             if type(mark.mark)==int:
                 cmarks.append(mark.mark)
         if len(cmarks) == 0:
