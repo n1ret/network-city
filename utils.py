@@ -28,16 +28,18 @@ def get_context(lessons: List[UserLesson]) -> IndexPageContext:
     lessons_names = set()
     marks = defaultdict(lambda: defaultdict(str))  # marks[lesson_name][date]
     for lesson in lessons:
+        cmarks=[]
         lessons_names.add(lesson.lesson)
         for mark in lesson.marks:
             date = parse_timestamp(mark.timestamp)
             dates.add(date)
             marks[lesson.lesson][date] = mark.mark
-        if len(marks[lesson.lesson]) == 0:
+            if type(mark.mark)==int:
+                cmarks.append(mark.mark)
+        if len(cmarks) == 0:
             marks[lesson.lesson]["Ср. Балл"] = ""
         else:
-            vals = list(map(lambda i: i[1], marks[lesson.lesson].items()))
-            avg = sum(vals) / len(vals)
+            avg = sum(cmarks) / len(cmarks)
             marks[lesson.lesson]["Ср. Балл"] = "{:.2f}".format(avg)
     lessons_names = sorted(list(lessons_names))
     dates = list(dates)
