@@ -37,11 +37,12 @@ def parse_table(school_class: str, excel_table: PathLike | bytes, db: DataBase):
             raise ValueError("'Тема урока' not found")
         
         fullnames = [str(name).split(".", 1)[-1].strip() for name in df[0][1:end] if name is not nan]
+        fullnames1 = [name for name in fullnames if name != ""]
 
-        if len(fullnames)==0:
+        if len(fullnames1)==0:
             continue
 
-        users_marks = [[] for _ in range(len(fullnames))]
+        users_marks = [[] for _ in range(len(fullnames1))]
         marks = df.loc[:end, 1:]
         for ind, (_, column) in enumerate(marks.items()):
             date = column[0]
@@ -63,7 +64,6 @@ def parse_table(school_class: str, excel_table: PathLike | bytes, db: DataBase):
 
                 users_marks[j].append(Mark(int(date.timestamp()), mark))
 
-        fullnames1 = [name for name in fullnames if name != ""]
         user_ids = db.convert_fullnames_to_user_ids(fullnames1, school_class)
 
         db.insert_or_update_lesson(
