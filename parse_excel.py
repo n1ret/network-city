@@ -39,7 +39,7 @@ def parse_table(school_class: str, excel_table: PathLike | bytes, db: DataBase):
         if end==-1:
             raise ValueError("'Тема урока' not found")
         
-        fullnames = [str(name).split(".", 1)[-1].strip() for name in df[0][1:end]]
+        fullnames = [''.join([i for i in str(name) if not i.isdigit()]).strip().strip(".") for name in df[0][1:end]]
         
         if len(fullnames)==0:
             continue
