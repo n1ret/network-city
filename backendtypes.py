@@ -86,7 +86,7 @@ def get_default_password_hash(login: str) -> str:
     return hash
 
 def next_available_login(logins: Set[str], fullname: str) -> str:
-    fname, lname = fullname.split()
+    fname, lname = fullname.split()[:2]
     name = fname + lname[0]
     add = ""
     while name + add in logins:
