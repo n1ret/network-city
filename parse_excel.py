@@ -41,8 +41,10 @@ def parse_table(school_class: str, excel_table: PathLike | bytes, db: DataBase):
 
         users_marks = [[] for _ in range(len(fullnames))]
         marks = df.loc[:end, 1:]
-        for _, column in marks.items():
+        for ind, (_, column) in enumerate(marks.items()):
             date = column[0]
+            if ind==0 and date is nan:
+                break
             if not isinstance(date, datetime):
                 raise TypeError(f"Firts row must contain datetime.datetime, founded: {type(date)}")
             for i, mark in enumerate(column[1:]):
