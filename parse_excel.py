@@ -40,7 +40,6 @@ def parse_table(school_class: str, excel_table: PathLike | bytes, db: DataBase):
             raise ValueError("'Тема урока' not found")
         
         fullnames = [str(name).split(".", 1)[-1].strip() for name in df[0][1:end]]
-        raise Exception(str(fullnames))
         
         if len(fullnames)==0:
             continue
