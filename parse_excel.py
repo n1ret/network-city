@@ -29,7 +29,8 @@ def parse_table(school_class: str, excel_table: PathLike | bytes, db: DataBase):
             raise ValueError(f"No columns found on sheet {lesson}")
         
         df[0].replace('', nan, inplace=True)
-        df.dropna(subset=[0], inplace=True,ignore_index=True)
+        df.dropna(subset=[0], how='all', inplace=True,ignore_index=True)
+        df.dropna(axis=1, how='all', inplace=True)
 
         end=-1
         for row in df.index:
