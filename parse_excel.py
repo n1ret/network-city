@@ -22,11 +22,13 @@ def parse_table(school_class: str, excel_table: PathLike | bytes, db: DataBase):
         db (DataBase): mysql database
     """
     sheets = pd.read_excel(excel_table, None, header=None)
+    sheets2 = pd.ExcelFile(excel_table)
     allids=set()
     relevant_lessons=[]
-    for lesson in sheets.keys():
+    for sheet in sheets2:
         if not sheet.visibility:
             continue
+        lesson=sheet.name
         relevant_lessons.append(lesson)
         df = sheets.get(lesson, None)
 
