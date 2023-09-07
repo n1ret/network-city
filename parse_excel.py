@@ -29,6 +29,7 @@ def parse_table(school_class: str, excel_table: PathLike | bytes, db: DataBase):
             raise ValueError(f"No columns found on sheet {lesson}")
         
         df[0].replace('', nan, inplace=True)
+        df[1:].replace(pd.NaT, None, inplace=True)
         df.dropna(subset=[0], inplace=True,ignore_index=True)
 
         end=-1
@@ -57,10 +58,13 @@ def parse_table(school_class: str, excel_table: PathLike | bytes, db: DataBase):
                 if i > len(fullnames)-1: break
                 if mark is nan:
                     continue
-                if str(mark).isdigit():
-                    mark = int(mark)
+                if type(mark) == datetime:
+                    mark = mark.day
                 else:
-                    mark = str(mark).upper()
+                    if str(mark).isdigit():
+                        mark = int(mark)
+                    else:
+                        mark = str(mark).upper()
 
                 users_marks[i].append(Mark(int(date.timestamp()), mark))
 
