@@ -34,6 +34,8 @@ def get_today_tomorrow():
         cpath=os.path.join(os.path.dirname(__file__), f"schedule/{j}")
         if not os.path.exists(cpath):
             ans[i]=""
+        else:
+            ans[i]=os.path.join(os.path.dirname(__file__), f"schedule/{j}")
     return ans
 
 
