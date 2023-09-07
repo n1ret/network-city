@@ -160,7 +160,7 @@ def api_get_class_students():
 def api_get_student_marks():
     with btypes.DataBase() as db:
         lessons = db.get_user_lessons(request.args.get("student"))
-    ctx = utils.get_context(lessons, False)
+    ctx = utils.get_context(lessons, with_schedule=False)
     return render_template("marks.html", ctx=ctx)
 
 
