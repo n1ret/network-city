@@ -263,7 +263,11 @@ class DataBase:
             tuple(zip(user_ids, [lesson] * len(user_ids), users_marks)),
         )
         self._commit()
-
+    
+    def delete_irrelevant_lessons(self,relevant_lessons: tuple, user_ids: tuple):
+        self.q.execute("DELETE FROM users_lesson WHERE user_id IN {} AND lesson NOT IN {}".format(user_ids,relevant_lessons))
+        self._commit()
+    
     def __enter__(self):
         return self
 

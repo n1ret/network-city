@@ -22,6 +22,7 @@ def parse_table(school_class: str, excel_table: PathLike | bytes, db: DataBase):
         db (DataBase): mysql database
     """
     sheets = pd.read_excel(excel_table, None, header=None)
+    allids=set()
     for lesson in sheets.keys():
         df = sheets.get(lesson, None)
 
@@ -45,6 +46,9 @@ def parse_table(school_class: str, excel_table: PathLike | bytes, db: DataBase):
         if len(fullnames)==0:
             continue
         user_ids = db.convert_fullnames_to_user_ids(fullnames, school_class)
+
+        for usid in user_ids:
+            allids.add(usid)
 
         users_marks = [[] for _ in range(len(fullnames))]
         marks = df.loc[:end, 1:]
@@ -71,7 +75,7 @@ def parse_table(school_class: str, excel_table: PathLike | bytes, db: DataBase):
         db.insert_or_update_lesson(
             user_ids, lesson, (pickle.dumps(marks_list) for marks_list in users_marks)
         )
-
+    db.delete_irrelevant_lessons(tuple(sheets.keys()),tuple(user_ids))
     update_json(DATA_FILE)
 
 
