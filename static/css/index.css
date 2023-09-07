@@ -172,6 +172,10 @@ body{
     border-right: 2px solid #ffffff33;
     width:0.1%;
     white-space: nowrap;
+    text-align: center;
+}
+.schedule tr td:last-of-type:has(:first-of-type){
+    border: none;
 }
 .schedule tr:last-of-type td{
     border-bottom: none;
@@ -217,9 +221,6 @@ body{
 .marks tr:first-of-type th:last-of-type{
     font-weight: 700;
     font-size: .8em;
-}
-.marks tr td:first-of-type{
-    text-align: center;
 }
 .marks tr td:last-of-type{
     font-weight: 600;
