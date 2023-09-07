@@ -24,7 +24,7 @@ def get_last_parse_timestamp(fmt: str = "%d.%m %H:%M") -> str:
     return parse_timestamp(data["last_parse"], fmt)
 
 def get_schedule_filename(date: datetime):
-    return date.strftime("%m.%d.%Y.xlsx")
+    return date.strftime("%d.%m.%Y.xlsx")
 
 def get_today_tomorrow():
     today=datetime.now(tz=timezone(timedelta(hours=5)))
