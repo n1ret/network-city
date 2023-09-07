@@ -23,7 +23,11 @@ def parse_table(school_class: str, excel_table: PathLike | bytes, db: DataBase):
     """
     sheets = pd.read_excel(excel_table, None, header=None)
     allids=set()
+    relevant_lessons=[]
     for lesson in sheets.keys():
+        if not sheet.visibility:
+            continue
+        relevant_lessons.append(lesson)
         df = sheets.get(lesson, None)
 
         if len(df.columns) == 0:
@@ -75,7 +79,7 @@ def parse_table(school_class: str, excel_table: PathLike | bytes, db: DataBase):
         db.insert_or_update_lesson(
             user_ids, lesson, (pickle.dumps(marks_list) for marks_list in users_marks)
         )
-    db.delete_irrelevant_lessons(tuple(sheets.keys()),tuple(user_ids))
+    db.delete_irrelevant_lessons(tuple(relevant_lessons),tuple(user_ids))
     update_json(DATA_FILE)
 
 
