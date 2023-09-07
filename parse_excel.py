@@ -26,7 +26,6 @@ def parse_table(school_class: str, excel_table: PathLike | bytes, db: DataBase):
     allids=set()
     relevant_lessons=[]
     for sheet in sheets2:
-        raise Exception(sheet.sheet_state)
         if sheet.sheet_state=="hidden":
             continue
         lesson=sheet.title
