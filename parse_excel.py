@@ -52,7 +52,7 @@ def parse_table(school_class: str, excel_table: PathLike | bytes, db: DataBase):
             if date is nan:
                 break
             if not isinstance(date, datetime):
-                raise TypeError(f"Firts row must contain datetime.datetime, founded: {type(date)}")
+                raise TypeError(f"First row must contain datetime.datetime, founded: {type(date)} at sheet {lesson}, column {ind}")
             for i, mark in enumerate(column[1:]):
                 if i > len(fullnames)-1: break
                 if mark is nan or mark is None or mark is pd.NaT:
