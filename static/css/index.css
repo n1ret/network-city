@@ -174,7 +174,7 @@ body{
     white-space: nowrap;
     text-align: center;
 }
-.schedule tr td:last-of-type:has(:first-of-type){
+.schedule tr th.notfound{
     border: none;
 }
 .schedule tr:last-of-type td{
