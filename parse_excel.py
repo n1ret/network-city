@@ -22,7 +22,7 @@ def parse_table(school_class: str, excel_table: PathLike | bytes, db: DataBase):
         db (DataBase): mysql database
     """
     sheets = pd.read_excel(excel_table, None, header=None)
-    sheets2 = pd.ExcelFile(excel_table)
+    sheets2 = pd.ExcelFile(excel_table).book.sheets()
     allids=set()
     relevant_lessons=[]
     for sheet in sheets2:
