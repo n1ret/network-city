@@ -22,13 +22,14 @@ def parse_table(school_class: str, excel_table: PathLike | bytes, db: DataBase):
         db (DataBase): mysql database
     """
     sheets = pd.read_excel(excel_table, None, header=None)
-    sheets2 = pd.ExcelFile(excel_table).book.sheets()
+    sheets2 = pd.ExcelFile(excel_table).book.worksheets
     allids=set()
     relevant_lessons=[]
     for sheet in sheets2:
-        if not sheet.visibility:
+        raise Exception(sheet.sheet_state)
+        if sheet.sheet_state=="hidden":
             continue
-        lesson=sheet.name
+        lesson=sheet.title
         relevant_lessons.append(lesson)
         df = sheets.get(lesson, None)
 
