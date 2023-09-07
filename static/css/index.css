@@ -120,22 +120,85 @@ body{
     margin: 0 10px;
     opacity: .8;
 }
-table{
+.selecttab{
+    display: flex;
+    margin-top: 15px;
+}
+.selecttab2{
+    font-size: .85rem;
+    margin-top: 0;
+    margin-bottom: 10px;
+}
+.selecttab .selectvar{
+    font-size: .75em;
+    margin: 0 5px;
+    padding: 5px 10px;
+    box-shadow: 0 0 30px -5px #0a0a0a;
+    border-radius: 7px;
+    background-color: #0a0a0a;
+    user-select: none;
+    cursor: pointer;
+    border: 1px solid #161616;
+    transition: border-color .3s;
+    text-wrap: nowrap;
+}
+.selecttab .selectvar.selected {
+    border-color: #ffffff33;
+}
+.selecttab .selectvar:not(.selected):hover{
+    border-color: #ffffff22;
+}
+.schedule {
+    border: 2px solid #ffffff55;
+    border-radius: 7px;
+    border-spacing: 0;
+    max-width: 270px;
+    margin-right: 10px;
+    margin-bottom: 15px;
+    position: relative;
+    left: 50%;
+    transform: translate(calc(-50% - 5px),0);
+}
+.schedule th {
+    font-size: 1.1em;
+    border-bottom: 2px solid #ffffff55;
+    padding: 4px 0;
+}
+.schedule td {
+    padding: 3px 5px;
+    border-bottom: 2px solid #ffffff33;
+}
+.schedule tr td:first-of-type{
+    border-right: 2px solid #ffffff33;
+    width:0.1%;
+    white-space: nowrap;
+}
+.schedule tr:last-of-type td{
+    border-bottom: none;
+}
+.schedule td a{
+    padding: 0 3px;
+    border-radius: 5px;
+    margin-left: 4px;
+    border: 1px solid #ffffff33;
+    float: right;
+}
+.marks {
     border-collapse: collapse;
     margin-right: 10px;
 }
-td {
+.marks td {
     font-weight: 100;
 }
-th,td {
+.marks th,.marks td {
     text-align: center;
     border-right: 1px solid #ffffff55;
     padding: 3px 2px;
 }
-tr {
+.marks tr {
     border-bottom: 1px solid #ffffff55;
 }
-tr th:first-of-type{
+.marks tr th:first-of-type{
     position: sticky;
     background-clip: padding-box !important;
     left: 0px;
@@ -144,25 +207,25 @@ tr th:first-of-type{
     padding-right: 5px;
     text-align: left;
 }
-tr:first-of-type th:first-of-type{
+.marks tr:first-of-type th:first-of-type{
     font-weight: 700;
     text-align: center;
 }
-tr:first-of-type th{
+.marks tr:first-of-type th{
     border-bottom: 1px solid white;
 }
-tr:first-of-type th:last-of-type{
+.marks tr:first-of-type th:last-of-type{
     font-weight: 700;
     font-size: .8em;
 }
-tr td:last-of-type{
+.marks tr td:last-of-type{
     font-weight: 600;
 }
 .cont{
     width: 100%;
     max-width: 600px;
 } 
-th {
+.marks th {
     font-size: .95em;
     font-weight: 500;
 }
@@ -175,8 +238,11 @@ th {
         font-size: .6em!important;
         border-radius: 0!important;
     }
-    th {
+    .marks th {
         font-size: .85em!important;
+    }
+    .selecttab .selectvar{
+        font-size: .6em;
     }
 }
 .markscont {
@@ -184,9 +250,9 @@ th {
     padding: 15px 20px;
     padding-bottom: 0;
     background-color: #0a0a0a;
-    margin-top: 15px;
     border-radius: 20px;
     font-size: .7em;
+    margin-top: 10px!important;
 }
 .simplebar-wrapper{
     padding-bottom: 15px;

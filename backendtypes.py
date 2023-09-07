@@ -63,8 +63,10 @@ class IndexPageContext:
     dates: List[str]
     lessons_names: List[str]
     marks: DefaultDict[str, DefaultDict[str, str]]
+    today_schedule: Optional[List[List[str]]]
+    tomorrow_schedule: Optional[List[List[str]]]
+    classr: str
     user_id: int = 0
-    classr: str = ""
     fullname: str = ""
     last_update: str = ""
 

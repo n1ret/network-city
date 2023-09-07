@@ -160,7 +160,7 @@ def api_get_class_students():
 def api_get_student_marks():
     with btypes.DataBase() as db:
         lessons = db.get_user_lessons(request.args.get("student"))
-    ctx = utils.get_context(lessons)
+    ctx = utils.get_context(lessons, False)
     return render_template("marks.html", ctx=ctx)
 
 
@@ -191,9 +191,8 @@ def main():
         if usr.is_teacher:
             ctx = btypes.TeacherPageContext(classes)
         else:
-            ctx = utils.get_context(lessons)
+            ctx = utils.get_context(lessons,usr.classr)
         
-        ctx.classr = usr.classr
         ctx.fullname = usr.fullname
         ctx.user_id = usr.uid
         ctx.last_update = utils.get_last_parse_timestamp()

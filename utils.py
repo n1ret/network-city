@@ -5,6 +5,7 @@ from backendtypes import IndexPageContext, UserLesson
 from collections import defaultdict
 import os
 from hashlib import md5
+from parse_schedule import parse
 
 
 def get_md5(*args) -> str:
@@ -22,8 +23,21 @@ def get_last_parse_timestamp(fmt: str = "%d.%m %H:%M") -> str:
         data = json.loads(f.read())
     return parse_timestamp(data["last_parse"], fmt)
 
+def get_schedule_filename(date: datetime):
+    return date.strftime("%m.%d.%Y.xlsx")
 
-def get_context(lessons: List[UserLesson]) -> IndexPageContext:
+def get_today_tomorrow():
+    today=datetime.now(tz=timezone(timedelta(hours=5)))
+    tomorrow=today+timedelta(hours=24)
+    ans=[get_schedule_filename(today),get_schedule_filename(tomorrow)]
+    for i,j in enumerate(ans):
+        cpath=os.path.join(os.path.dirname(__file__), f"schedule/{j}")
+        if not os.path.exists(cpath):
+            ans[i]=""
+    return ans
+
+
+def get_context(lessons: List[UserLesson], classr="", with_schedule=True) -> IndexPageContext:
     dates = set()
     lessons_names = set()
     marks = defaultdict(lambda: defaultdict(str))  # marks[lesson_name][date]
@@ -48,4 +62,14 @@ def get_context(lessons: List[UserLesson]) -> IndexPageContext:
     dates = list(dates)
     dates.sort(key=lambda date: datetime.strptime(date, "%d.%m"))
     dates.append("Ср. Балл")
-    return IndexPageContext(dates, lessons_names, marks)
+
+    schedules=[]
+
+    if with_schedule:
+        sched_dates=get_today_tomorrow()
+        for sched_date in sched_dates:
+            schedules.append(parse(classr, sched_date))
+    else:
+        schedules=[None,None]
+
+    return IndexPageContext(dates, lessons_names, marks,schedules[0],schedules[1],classr)

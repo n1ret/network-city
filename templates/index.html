@@ -42,15 +42,69 @@
                     <a class="menuitem" onclick="window.location.replace('/logout')"><i class="fa-solid fa-arrow-right-from-bracket"></i> Выйти</a>
                 </div>
             </div>
+            <div class="selecttab" id="tabselect">
+                <div class="selectvar selected" name="marks"><i class="fa-solid fa-book"></i> Оценки</div>
+                <div class="selectvar" name="schedule"><i class="fa-solid fa-calendar-days"></i> Расписание</div>
+            </div>
             <div class="markscont">
-                <div data-simplebar>
+                <div id="markstab">
                     {% include "marks.html" with context %}
+                </div>
+                <div id="scheduletab" style="display: none;">
+                    <div class="selecttab selecttab2" id="tabselect1">
+                        <div class="selectvar selected" name="today">Сегодня</div>
+                        <div class="selectvar" name="tomorrow">Завтра</div>
+                    </div>
+                    {% include "schedule.html" with context %}
                 </div>
             </div>
         </div>
     </div>
     <div class="by">by <a href="https://t.me/btless" target="_blank" rel="noopener noreferrer">@btless</a> & <a href="https://t.me/n1ret" target="_blank" rel="noopener noreferrer">@n1ret</a></div>
 </body>
-<script>const my_user_id={{ ctx.user_id }}</script>
+<script>
+    const tabs={
+        marks:$("#markstab"),
+        schedule:$("#scheduletab")
+    }
+    const tabs1={
+        today:$("#todaytab"),
+        tomorrow:$("#tomorrowtab")
+    }
+    $(".selecttab") > $(".selectvar").click((e)=>{
+        const targt=$(e.target);
+        if(targt.hasClass("selected")) return;
+        targt.parent().trigger("selectionchange",targt.attr("name"));
+        targt.siblings().each((i,el)=>{
+            el.classList.remove("selected");
+        })
+        targt.addClass("selected");
+    });
+    $("#tabselect").on("selectionchange",(e,newtabname)=>{
+        var prevtab,newtab;
+        if(newtabname=="marks"){
+            prevtab=tabs.schedule;
+            newtab=tabs.marks;
+        } else if (newtabname=="schedule"){
+            prevtab=tabs.marks;
+            newtab=tabs.schedule;
+        }
+        prevtab.css("display","none");
+        newtab.css("display","block");
+    });
+    $("#tabselect1").on("selectionchange",(e,newtabname)=>{
+        var prevtab,newtab;
+        if(newtabname=="today"){
+            prevtab=tabs1.tomorrow;
+            newtab=tabs1.today;
+        } else if (newtabname=="tomorrow"){
+            prevtab=tabs1.today;
+            newtab=tabs1.tomorrow;
+        }
+        prevtab.css("display","none");
+        newtab.css("display","block");
+    });
+</script>
+<!-- <script>const my_user_id={{ ctx.user_id }}</script> -->
 <script src="/static/js/index.js"></script>
 </html>

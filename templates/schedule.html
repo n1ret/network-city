@@ -1,0 +1,38 @@
+{% if ctx.today_schedule%}
+<table class="schedule" id="todaytab">
+    <tr>
+        <th colspan="2">{{ ctx.classr }}</th>
+    </tr>
+    {% for lesson in ctx.today_schedule %}
+    <tr>
+        <td>{{ lesson[0] }}</td>
+        <td>{{ lesson[1] }} <a>{{ lesson[2] }}</a></td>
+    </tr>
+    {% endfor %}
+</table>
+{% else %}
+<table>
+    <tr>
+        <th>Расписания пока нет</th>
+    </tr>
+</table>
+{% endif %}
+{% if ctx.tomorrow_schedule%}
+<table class="schedule" id="tomorrowtab" style="display: none;">
+    <tr>
+        <th colspan="2">{{ ctx.classr }}</th>
+    </tr>
+    {% for lesson in ctx.tomorrow_schedule %}
+    <tr>
+        <td>{{ lesson[0] }}</td>
+        <td>{{ lesson[1] }} <a>{{ lesson[2] }}</a></td>
+    </tr>
+    {% endfor %}
+</table>
+{% else %}
+<table>
+    <tr>
+        <th>Расписания пока нет</th>
+    </tr>
+</table>
+{% endif %}
