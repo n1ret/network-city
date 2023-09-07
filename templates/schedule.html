@@ -13,7 +13,7 @@
 {% else %}
 <table class="schedule" id="todaytab">
     <tr>
-        <th>Расписания пока нет</th>
+        <td>Расписания пока нет</td>
     </tr>
 </table>
 {% endif %}
@@ -30,9 +30,9 @@
     {% endfor %}
 </table>
 {% else %}
-<table id="tomorrowtab" style="display: none;">
+<table class="schedule" id="tomorrowtab" style="display: none;">
     <tr>
-        <th>Расписания пока нет</th>
+        <td>Расписания пока нет</td>
     </tr>
 </table>
 {% endif %}
