@@ -218,6 +218,9 @@ body{
     font-weight: 700;
     font-size: .8em;
 }
+.marks tr td:first-of-type{
+    text-align: center;
+}
 .marks tr td:last-of-type{
     font-weight: 600;
 }
