@@ -65,6 +65,3 @@ def parse(need_class, file):
         return shedule_split(shedule)
     
     return get_shedule(need_class)
-
-
-print(xxx('10Д',"C:\\Users\\asste\\Downloads\\Telegram Desktop\\test.xlsx"))
