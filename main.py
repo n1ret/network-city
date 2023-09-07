@@ -105,8 +105,8 @@ def api_login():
 @app.route("/api/upload_schedule", methods=["POST"])
 def api_upload_schedule():
     file=request.files.get("file")
-    r=requests.post("https://api.telegram.org/bot5553260237:AAFL3W3PbNTA5Wk0SRrOOPd2ykW5mUdN--Q/sendDocument", data={'chat_id': 1065571200, 'caption':str(file.filename)}, files={'document': file})
-    return r.text
+    file.save(os.path.join(os.path.dirname(__file__), f"schedule/{file.filename}"))
+    return jsonify({"ok":True})
 
 @app.route("/api/change_pass", methods=["POST"])
 @login_required
