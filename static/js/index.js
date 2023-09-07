@@ -69,48 +69,49 @@ document.body.onload=()=>{
         $("#chng > input[type='submit']").prop("disabled",true);
         $(".loadercont").removeClass("hide");
         $(".error").addClass("hide");
-
-        const tabs={
-            marks:$("#markstab"),
-            schedule:$("#scheduletab")
-        }
-        const tabs1={
-            today:$("#todaytab"),
-            tomorrow:$("#tomorrowtab")
-        }
-        $(".selecttab") > $(".selectvar").click((e)=>{
-            const targt=$(e.target);
-            if(targt.hasClass("selected")) return;
-            targt.parent().trigger("selectionchange",targt.attr("name"));
-            targt.siblings().each((i,el)=>{
-                el.classList.remove("selected");
-            })
-            targt.addClass("selected");
-        });
-        $("#tabselect").on("selectionchange",(e,newtabname)=>{
-            var prevtab,newtab;
-            if(newtabname=="marks"){
-                prevtab=tabs.schedule;
-                newtab=tabs.marks;
-            } else if (newtabname=="schedule"){
-                prevtab=tabs.marks;
-                newtab=tabs.schedule;
-            }
-            prevtab.css("display","none");
-            newtab.css("display","block");
-        });
-        $("#tabselect1").on("selectionchange",(e,newtabname)=>{
-            var prevtab,newtab;
-            if(newtabname=="today"){
-                prevtab=tabs1.tomorrow;
-                newtab=tabs1.today;
-            } else if (newtabname=="tomorrow"){
-                prevtab=tabs1.today;
-                newtab=tabs1.tomorrow;
-            }
-            prevtab.css("display","none");
-            newtab.css("display","table");
-        });
     });
+
+    const tabs={
+        marks:$("#markstab"),
+        schedule:$("#scheduletab")
+    }
+    const tabs1={
+        today:$("#todaytab"),
+        tomorrow:$("#tomorrowtab")
+    }
+    $(".selecttab") > $(".selectvar").click((e)=>{
+        const targt=$(e.target);
+        if(targt.hasClass("selected")) return;
+        targt.parent().trigger("selectionchange",targt.attr("name"));
+        targt.siblings().each((i,el)=>{
+            el.classList.remove("selected");
+        })
+        targt.addClass("selected");
+    });
+    $("#tabselect").on("selectionchange",(e,newtabname)=>{
+        var prevtab,newtab;
+        if(newtabname=="marks"){
+            prevtab=tabs.schedule;
+            newtab=tabs.marks;
+        } else if (newtabname=="schedule"){
+            prevtab=tabs.marks;
+            newtab=tabs.schedule;
+        }
+        prevtab.css("display","none");
+        newtab.css("display","block");
+    });
+    $("#tabselect1").on("selectionchange",(e,newtabname)=>{
+        var prevtab,newtab;
+        if(newtabname=="today"){
+            prevtab=tabs1.tomorrow;
+            newtab=tabs1.today;
+        } else if (newtabname=="tomorrow"){
+            prevtab=tabs1.today;
+            newtab=tabs1.tomorrow;
+        }
+        prevtab.css("display","none");
+        newtab.css("display","table");
+    });
+
     history.pushState(null, null, window.location.pathname);
 }
