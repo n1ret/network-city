@@ -48,7 +48,9 @@
             </div>
             <div class="markscont">
                 <div id="markstab">
-                    {% include "marks.html" with context %}
+                    <div data-simplebar>
+                        {% include "marks.html" with context %}
+                    </div>
                 </div>
                 <div id="scheduletab" style="display: none;">
                     <div class="selecttab selecttab2" id="tabselect1">
