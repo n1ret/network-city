@@ -29,7 +29,6 @@ def parse_table(school_class: str, excel_table: PathLike | bytes, db: DataBase):
             raise ValueError(f"No columns found on sheet {lesson}")
         
         df[0].replace('', nan, inplace=True)
-        df[1:].replace(pd.NaT, None, inplace=True)
         df.dropna(subset=[0], inplace=True,ignore_index=True)
 
         end=-1
@@ -56,7 +55,7 @@ def parse_table(school_class: str, excel_table: PathLike | bytes, db: DataBase):
                 raise TypeError(f"Firts row must contain datetime.datetime, founded: {type(date)}")
             for i, mark in enumerate(column[1:]):
                 if i > len(fullnames)-1: break
-                if mark is nan:
+                if mark is nan or mark in None or mark is pd.NaT:
                     continue
                 if type(mark) == datetime:
                     mark = mark.day
