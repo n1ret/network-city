@@ -1,3 +1,4 @@
+# by 11Б
 import openpyxl
 import re
 from openpyxl.utils.cell import coordinate_to_tuple
@@ -51,6 +52,8 @@ def parse(need_class, file):
         shedule = list(map(lambda x, y: [x, y], times, classes))
 
         def shedule_split(shedule):
+            chto = ["гебраических зада","ометричиских зада","физичес","Всеобщая история","изическая культу", "ометрическ", "Изобразительное","Родная литература","Физика в задачах","Родной язык","История России","Всеобщая история","Биология в задачах","альный проект","именение математических"]
+            nachto = ["Математика","Геометрия","Физика","История","Физ-ра", "Геометрия", "ИЗО","Литература","Физика","Русский язык","История","История","Биология с эксп.","Индив. проект","Математика"]
             for i in shedule:
                 if i[-1] is not None:
                     index = 1000
@@ -59,6 +62,9 @@ def parse(need_class, file):
                             index=min(i[-1].index(j),index)
                     num=i[-1][index:]
                     i[-1] = i[-1][:index]
+                    for j,k in enumerate(chto):
+                        if k in i[-1]:
+                            i[-1]=nachto[j]
                     i.append(num)
             return shedule
 
