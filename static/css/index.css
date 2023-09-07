@@ -176,6 +176,7 @@ body{
 }
 .schedule tr th.notfound{
     border: none;
+    padding: 4px 10px;
 }
 .schedule tr:last-of-type td{
     border-bottom: none;
