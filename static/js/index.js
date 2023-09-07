@@ -109,7 +109,7 @@ document.body.onload=()=>{
                 newtab=tabs1.tomorrow;
             }
             prevtab.css("display","none");
-            newtab.css("display","block");
+            newtab.css("display","table");
         });
     });
     history.pushState(null, null, window.location.pathname);
