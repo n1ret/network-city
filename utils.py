@@ -28,7 +28,13 @@ def get_schedule_filename(date: datetime):
 
 def get_today_tomorrow():
     today=datetime.now(tz=timezone(timedelta(hours=5)))
-    tomorrow=today+timedelta(hours=24)
+    if today.weekday()<4:
+        tomorrow=today+timedelta(days=1)
+        skipped_to="Завтра"
+    else:
+        days_ahead=7-today.weekday()
+        tomorrow=today+timedelta(days=days_ahead)
+        skipped_to="Понедельник"
     ans=[get_schedule_filename(today),get_schedule_filename(tomorrow)]
     for i,j in enumerate(ans):
         cpath=os.path.join(os.path.dirname(__file__), f"schedule/{j}")
@@ -36,7 +42,7 @@ def get_today_tomorrow():
             ans[i]=""
         else:
             ans[i]=os.path.join(os.path.dirname(__file__), f"schedule/{j}")
-    return ans
+    return ans, skipped_to
 
 
 def get_context(lessons: List[UserLesson], classr="", with_schedule=True) -> IndexPageContext:
@@ -68,10 +74,10 @@ def get_context(lessons: List[UserLesson], classr="", with_schedule=True) -> Ind
     schedules=[]
 
     if with_schedule:
-        sched_dates=get_today_tomorrow()
+        sched_date,skipped_to=get_today_tomorrow()
         for sched_date in sched_dates:
             schedules.append(parse(classr, sched_date))
     else:
         schedules=[None,None]
 
-    return IndexPageContext(dates, lessons_names, marks,schedules[0],schedules[1],classr)
+    return IndexPageContext(dates, lessons_names, marks,schedules[0],schedules[1],classr,skipped_to)
