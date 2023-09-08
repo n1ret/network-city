@@ -71,13 +71,12 @@ def get_context(lessons: List[UserLesson], classr="", with_schedule=True) -> Ind
     dates.sort(key=lambda date: datetime.strptime(date, "%d.%m"))
     dates.append("Ср. Балл")
 
-    schedules=[]
-
     if with_schedule:
         sched_dates,skipped_to=get_today_tomorrow()
         for sched_date in sched_dates:
             schedules.append(parse(classr, sched_date))
     else:
         schedules=[None,None]
+        skipped_to=""
 
     return IndexPageContext(dates, lessons_names, marks,schedules[0],schedules[1],classr,skipped_to)
