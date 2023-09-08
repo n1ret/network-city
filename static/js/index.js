@@ -94,6 +94,7 @@ document.body.onload=()=>{
             prevtab=tabs.schedule;
             newtab=tabs.marks;
         } else if (newtabname=="schedule"){
+            yaCounter94877549.reachGoal('schedopen');
             prevtab=tabs.marks;
             newtab=tabs.schedule;
         }
