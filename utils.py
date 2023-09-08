@@ -28,7 +28,7 @@ def get_schedule_filename(date: datetime):
 
 def get_today_tomorrow():
     today=datetime.now(tz=timezone(timedelta(hours=5)))
-    if today.weekday()<4:
+    if today.weekday()<4 or today.weekday()>5:
         tomorrow=today+timedelta(days=1)
         skipped_to="Завтра"
     else:
