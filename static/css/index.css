@@ -40,6 +40,12 @@
     width: calc(100% / 1.5);
   }
 }
+#onesignal-popover-container{
+    transform: scale(1/1.5);
+    -moz-transform: scale(1/1.5);
+    -moz-transform-origin: 0 0;
+    transform-origin: 0 0;
+}
 body{
     zoom: 1.5;
     font-family: "Golos";
