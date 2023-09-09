@@ -1,4 +1,5 @@
 document.body.onload= ()=>{
+    ym(94877549, 'hit', "/#login");
     function showError(err){
         $(".error").text(err);
         $(".error").removeClass("hide");

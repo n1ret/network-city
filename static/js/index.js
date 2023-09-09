@@ -7,6 +7,7 @@ $(window).on('popstate',()=>{
     history.pushState(null, null, window.location.pathname);
 })
 document.body.onload=()=>{
+    ym(94877549, 'hit', "/#marks");
     $(".menu").css("left",Math.max($(".header").width()-$(".menu").width()+5,0)+"px");
     
     $(".menu").get(0).style.setProperty("--menu-height", $(".menu").height()+"px");
@@ -91,9 +92,11 @@ document.body.onload=()=>{
     $("#tabselect").on("selectionchange",(e,newtabname)=>{
         var prevtab,newtab;
         if(newtabname=="marks"){
+            ym(94877549, 'hit', "/#marks");
             prevtab=tabs.schedule;
             newtab=tabs.marks;
         } else if (newtabname=="schedule"){
+            ym(94877549, 'hit', "/#schedule_init");
             yaCounter94877549.reachGoal('schedopen');
             prevtab=tabs.marks;
             newtab=tabs.schedule;
@@ -104,9 +107,11 @@ document.body.onload=()=>{
     $("#tabselect1").on("selectionchange",(e,newtabname)=>{
         var prevtab,newtab;
         if(newtabname=="today"){
+            ym(94877549, 'hit', "/#schedule_today");
             prevtab=tabs1.tomorrow;
             newtab=tabs1.today;
         } else if (newtabname=="tomorrow"){
+            ym(94877549, 'hit', "/#schedule_tomorrow");
             prevtab=tabs1.today;
             newtab=tabs1.tomorrow;
         }
