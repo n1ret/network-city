@@ -72,6 +72,7 @@ def get_context(lessons: List[UserLesson], classr="", with_schedule=True) -> Ind
     dates.append("Ср. Балл")
 
     if with_schedule:
+        schedules=[]
         sched_dates,skipped_to=get_today_tomorrow()
         for sched_date in sched_dates:
             schedules.append(parse(classr, sched_date))
