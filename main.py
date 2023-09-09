@@ -110,7 +110,7 @@ def api_upload_schedule():
     file.save(os.path.join(os.path.dirname(__file__), f"schedule/{file.filename}"))
     data = {
         "app_id": os.environ.get("ONESIGNAL_APP_ID"),
-        "included_segments": ["Subscribed Users"],
+        "included_segments": ["All"],
         "contents": {
             "en": f"Появилось расписание на {'.'.join(file.filename.split('.')[:2])}"
         },
