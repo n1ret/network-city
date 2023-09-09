@@ -16,11 +16,14 @@ from parse_excel import parse_table
 from functools import wraps
 import traceback
 import requests
+from onesignal import OneSignal, SegmentNotificationclient
 
 
 dotenv_path = os.path.join(os.path.dirname(__file__), ".env")
 if os.path.exists(dotenv_path):
     load_dotenv(dotenv_path)
+
+client = OneSignal(os.environ.get("ONESIGNAL_APP_ID"), os.environ.get("ONESIGNAL_KEY"))
 
 app = Flask(
     "diary",
@@ -106,6 +109,16 @@ def api_login():
 def api_upload_schedule():
     file=request.files.get("file")
     file.save(os.path.join(os.path.dirname(__file__), f"schedule/{file.filename}"))
+    notification_to_all_users = SegmentNotification(
+        contents={
+            "ru": f"Появилось расписание на {"."join(file.filename.split(".")[:2])}"
+        },
+        headings={
+            "ru":"Расписание"
+        },
+        included_segments=[SegmentNotification.ALL]
+    )
+    client.send(notification_to_all_users)
     return jsonify({"ok":True})
 
 @app.route("/api/change_pass", methods=["POST"])
