@@ -46,7 +46,7 @@
     -moz-transform-origin: 50% 0;
     transform-origin: 50% 0;
 }
-#onesignal-slidedown-container{
+#onesignal-slidedown-container:not(.slide-down){
     font-size: .6em!important;
 }
 body{
