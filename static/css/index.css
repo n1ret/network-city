@@ -40,14 +40,14 @@
     width: calc(100% / 1.5);
   }
 }
-#onesignal-popover-container{
+#onesignal-slidedown-container.slide-down{
     transform: scale(.66);
     -moz-transform: scale(.66);
     -moz-transform-origin: 50% 0;
     transform-origin: 50% 0;
 }
 #onesignal-slidedown-container{
-    font-size: .6em;
+    font-size: .6em!important;
 }
 body{
     zoom: 1.5;
