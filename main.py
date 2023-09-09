@@ -6,6 +6,7 @@ from flask import (
     jsonify,
     render_template,
     redirect,
+    send_from_directory
 )
 import re
 import os
@@ -16,7 +17,7 @@ from parse_excel import parse_table
 from functools import wraps
 import traceback
 import requests
-from onesignal import OneSignal, SegmentNotificationclient
+from onesignal import OneSignal, SegmentNotification
 
 
 dotenv_path = os.path.join(os.path.dirname(__file__), ".env")
@@ -111,7 +112,7 @@ def api_upload_schedule():
     file.save(os.path.join(os.path.dirname(__file__), f"schedule/{file.filename}"))
     notification_to_all_users = SegmentNotification(
         contents={
-            "ru": f"Появилось расписание на {"."join(file.filename.split(".")[:2])}"
+            "ru": f"Появилось расписание на {'.'.join(file.filename.split('.')[:2])}"
         },
         headings={
             "ru":"Расписание"
@@ -189,6 +190,9 @@ def api_update_marks():
             return jsonify({"ok": False, "error": traceback.format_exc()})
     return jsonify({"ok": True, "error": ""})
 
+@app.route("/sw.js")
+def sw_js():
+    return send_from_directory("static", "sw.js")
 
 @app.route("/")
 def main():
