@@ -6,7 +6,7 @@ from flask import (
     jsonify,
     render_template,
     redirect,
-    send_from_directory
+    send_from_directory,
 )
 import re
 import os
@@ -17,14 +17,10 @@ from parse_excel import parse_table
 from functools import wraps
 import traceback
 import requests
-from onesignal import OneSignal, SegmentNotification
-
 
 dotenv_path = os.path.join(os.path.dirname(__file__), ".env")
 if os.path.exists(dotenv_path):
     load_dotenv(dotenv_path)
-
-client = OneSignal(os.environ.get("ONESIGNAL_APP_ID"), os.environ.get("ONESIGNAL_KEY"))
 
 app = Flask(
     "diary",
@@ -65,6 +61,7 @@ def teacher_required(f):
             if not (db.get_user_by_id(session["user_id"]).is_teacher):
                 return jsonify({"ok": False, "error": "Only for teachers"})
         return f(*args, **kwargs)
+
     return func
 
 
@@ -74,6 +71,7 @@ def login_required(f):
         if not session["is_logged"]:
             return jsonify({"ok": False, "error": "Not logged in"})
         return f(*args, **kwargs)
+
     return func
 
 
@@ -106,21 +104,26 @@ def api_login():
     session.modified = True
     return jsonify({"ok": True, "error": ""})
 
+
 @app.route("/api/upload_schedule", methods=["POST"])
 def api_upload_schedule():
-    file=request.files.get("file")
+    file = request.files.get("file")
     file.save(os.path.join(os.path.dirname(__file__), f"schedule/{file.filename}"))
-    notification_to_all_users = SegmentNotification(
-        contents={
+    data = {
+        "app_id": os.environ.get("ONESIGNAL_APP_ID"),
+        "included_segments": ["All"],
+        "contents": {
             "ru": f"Появилось расписание на {'.'.join(file.filename.split('.')[:2])}"
         },
-        headings={
-            "ru":"Расписание"
-        },
-        included_segments=[SegmentNotification.ALL]
+        "headings":{"ru": "Расписание"}
+    }
+    requests.post(
+        "https://onesignal.com/api/v1/notifications",
+        headers={"Authorization": os.environ.get("ONESIGNAL_KEY")},
+        json=data,
     )
-    client.send(notification_to_all_users)
-    return jsonify({"ok":True})
+    return jsonify({"ok": True})
+
 
 @app.route("/api/change_pass", methods=["POST"])
 @login_required
@@ -190,9 +193,11 @@ def api_update_marks():
             return jsonify({"ok": False, "error": traceback.format_exc()})
     return jsonify({"ok": True, "error": ""})
 
+
 @app.route("/sw.js")
 def sw_js():
     return send_from_directory("static", "sw.js")
+
 
 @app.route("/")
 def main():
@@ -208,8 +213,8 @@ def main():
         if usr.is_teacher:
             ctx = btypes.TeacherPageContext(classes)
         else:
-            ctx = utils.get_context(lessons,usr.classr)
-        
+            ctx = utils.get_context(lessons, usr.classr)
+
         ctx.fullname = usr.fullname
         ctx.user_id = usr.uid
         ctx.last_update = utils.get_last_parse_timestamp()
