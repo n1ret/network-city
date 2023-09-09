@@ -104,25 +104,25 @@ def api_login():
     session.modified = True
     return jsonify({"ok": True, "error": ""})
 
-
 @app.route("/api/upload_schedule", methods=["POST"])
 def api_upload_schedule():
     file = request.files.get("file")
     file.save(os.path.join(os.path.dirname(__file__), f"schedule/{file.filename}"))
     data = {
         "app_id": os.environ.get("ONESIGNAL_APP_ID"),
-        "included_segments": ["All"],
+        "included_segments": ["Subscribed Users"],
         "contents": {
-            "ru": f"Появилось расписание на {'.'.join(file.filename.split('.')[:2])}"
+            "en": f"Появилось расписание на {'.'.join(file.filename.split('.')[:2])}"
         },
-        "headings":{"ru": "Расписание"}
+        "headings":{"en": "Расписание"},
+        "name":f"schedule_{'_'.join(file.filename.split('.')[:2])}"
     }
-    requests.post(
+    r=requests.post(
         "https://onesignal.com/api/v1/notifications",
-        headers={"Authorization": os.environ.get("ONESIGNAL_KEY")},
+        headers={"Authorization": f"Basic {os.environ.get('ONESIGNAL_KEY')}"},
         json=data,
     )
-    return jsonify({"ok": True})
+    return jsonify(r.json())
 
 
 @app.route("/api/change_pass", methods=["POST"])
@@ -194,9 +194,9 @@ def api_update_marks():
     return jsonify({"ok": True, "error": ""})
 
 
-@app.route("/sw.js")
+@app.route("/sw")
 def sw_js():
-    return send_from_directory("static", "sw.js")
+    return send_from_directory(os.path.join(os.path.dirname(__file__), "static"), "sw.js")
 
 
 @app.route("/")
