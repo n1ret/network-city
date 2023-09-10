@@ -118,5 +118,6 @@ document.body.onload=()=>{
         prevtab.css("display","none");
         newtab.css("display","table");
     });
+    localStorage.getItem("onesignal-notification-prompt");
     history.pushState(null, null, window.location.pathname);
 }
