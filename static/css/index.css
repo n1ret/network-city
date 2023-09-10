@@ -49,6 +49,10 @@
 #onesignal-slidedown-container:not(.slide-down){
     font-size: .6em!important;
 }
+.onesignal-customlink-container{
+    min-height: 0!important;
+    margin: 10px 0!important;
+}
 body{
     zoom: 1.5;
     font-family: "Golos";
@@ -184,7 +188,6 @@ body{
     text-align: center;
 }
 .schedule tr th.notfound{
-    border: none;
     padding: 4px 10px;
 }
 .schedule tr:last-of-type td{
