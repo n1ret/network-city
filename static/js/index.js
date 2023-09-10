@@ -1,4 +1,5 @@
 function openModal(){
+    ym(94877549, 'hit', "/#change_pass");
     $(".headercont").removeClass("opened");
     $('.modalcont').removeClass('hide');
 }
