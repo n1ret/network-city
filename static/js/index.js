@@ -97,7 +97,7 @@ document.body.onload=()=>{
             newtab=tabs.marks;
         } else if (newtabname=="schedule"){
             ym(94877549, 'hit', "/#schedule_init");
-            yaCounter94877549.reachGoal('schedopen');
+            ym(94877549, 'reachGoal','schedopen');
             prevtab=tabs.marks;
             newtab=tabs.schedule;
         }
