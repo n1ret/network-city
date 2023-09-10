@@ -118,6 +118,8 @@ document.body.onload=()=>{
         prevtab.css("display","none");
         newtab.css("display","table");
     });
-
+    $(".onesignal-customlink-subscribe.state-unsubscribed").click((e)=>{
+        localStorage.removeItem("onesignal-notification-prompt");
+    }); 
     history.pushState(null, null, window.location.pathname);
 }
