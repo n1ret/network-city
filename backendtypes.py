@@ -66,6 +66,7 @@ class IndexPageContext:
     today_schedule: Optional[List[List[str]]]
     tomorrow_schedule: Optional[List[List[str]]]
     classr: str
+    current_timestamp: str
     skip_to: str = "Завтра"
     user_id: int = 0
     fullname: str = ""

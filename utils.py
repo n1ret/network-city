@@ -80,4 +80,6 @@ def get_context(lessons: List[UserLesson], classr="", with_schedule=True) -> Ind
         schedules=[None,None]
         skipped_to=""
 
-    return IndexPageContext(dates, lessons_names, marks,schedules[0],schedules[1],classr,skipped_to)
+    current_timestamp=datetime.now(tz=timezone(timedelta(hours=5))).strftime("%H:%M")
+
+    return IndexPageContext(dates, lessons_names, marks,schedules[0],schedules[1],classr,current_timestamp,skipped_to)
