@@ -8,20 +8,20 @@
     <div class="selectvar {{ '' if tshow else 'selected' }}" name="tomorrow">{{ ctx.skip_to }}</div>
 </div>
 {% if ctx.today_schedule%}
-<table class="schedule" id="todaytab" {{ '' if tshow else 'style="display: none;"' }>
+<table class="schedule" id="todaytab" {%if not tshow%}style="display: none;"{%endif%}>
     <tr>
         <th colspan="2">{{ ctx.classr }}</th>
     </tr>
     {% for lesson in ctx.today_schedule %}
     {% set ctimes = lesson[0].split(' - ') %}
-    <tr {% 'style="font-weight: 700;"' if ctimes[0]<ctx.current_timestamp<ctimes[1] else ''%}>
+    <tr {%if ctimes[0]<ctx.current_timestamp<ctimes[1]%}style="font-weight: 700;"{%endif%}>
         <td>{{ lesson[0] }}</td>
         <td>{{ lesson[1] }} <a>{{ lesson[2] }}</a></td>
     </tr>
     {% endfor %}
 </table>
 {% else %}
-<table class="schedule" id="todaytab" {{ '' if tshow else 'style="display: none;"' }}>
+<table class="schedule" id="todaytab" {%if not tshow%}style="display: none;"{%endif%}>
     <tr>
         <th class="notfound">Расписания нет</th>
     </tr>
@@ -32,7 +32,7 @@
 {% endif %}
 
 {% if ctx.tomorrow_schedule%}
-<table class="schedule" id="tomorrowtab" {{ 'style="display: none;"' if tshow else '' }}>
+<table class="schedule" id="tomorrowtab" {%if tshow%}style="display: none;"{%endif%}>
     <tr>
         <th colspan="2">{{ ctx.classr }}</th>
     </tr>
@@ -44,7 +44,7 @@
     {% endfor %}
 </table>
 {% else %}
-<table class="schedule" id="tomorrowtab" {{ 'style="display: none;"' if tshow else '' }}>
+<table class="schedule" id="tomorrowtab" {%if tshow%}style="display: none;"{%endif%}>
     <tr>
         <th class="notfound">Расписания пока нет</th>
     </tr>
