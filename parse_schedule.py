@@ -65,7 +65,7 @@ def parse(need_class, file):
                         num=""
                     else:
                         num=i[-1][index:]
-                    i[-1] = i[-1][:index]
+                        i[-1] = i[-1][:index]
                     for j,k in enumerate(chto):
                         if k in i[-1]:
                             i[-1]=nachto[j]
