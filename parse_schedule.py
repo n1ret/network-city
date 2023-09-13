@@ -56,12 +56,15 @@ def parse(need_class, file):
             nachto = ["Математика","Геометрия","Физика","История","Физ-ра", "Геометрия", "ИЗО","Литература","Физика","Русский язык","История","История","Биология с эксп.","Индив. проект","Математика","Англ. яз","Вероятн. и стат."]
             for i in shedule:
                 if i[-1] is not None:
-                    indexes=[]
+                    index=1000
+                    indexmx=0
+                    cnt=0
                     for j in ["1","2","3","4","5","6","7","8","9","0","/","Геол.музей","Б.спорт.зал","М.спорт.зал","Акт.зал","Ист.музей"]:
                         if j in i[-1]:
-                            indexes.append(i[-1].index(j))
-                    index=min(indexes)
-                    if max(indexes)-min(indexes)!=len(indexes)-1:
+                            index=min(index,i[-1].index(j))
+                            indexmx=max(indexmx,i[-1].rindex(j))
+                            cnt+=i[-1].count(j)
+                    if indexmx-index!=cnt-1:
                         num=""
                     else:
                         num=i[-1][index:]
