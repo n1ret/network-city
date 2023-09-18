@@ -93,7 +93,7 @@ def next_available_login(logins: Set[str], fullname: str) -> str:
     try:
         fname, lname = fullname.split()[:2]
     except:
-        raise ValueError(f"invalid fname,lname = {fullname}")
+        return None
     name = fname + lname[0]
     add = ""
     while name + add in logins:
@@ -247,6 +247,9 @@ class DataBase:
             user_id = self.q.fetchone()
             if user_id is None:
                 login = next_available_login(used_logins, user_fullname)
+                if login is None:
+                    user_ids.append(-1)
+                    continue
                 password_hash = get_default_password_hash(login)
                 user_id = self.insert_or_update_user(
                     user_fullname, school_class, login=login,password_hash=password_hash
@@ -259,12 +262,16 @@ class DataBase:
     def insert_or_update_lesson(
         self, user_ids: tuple[int], lesson: str, users_marks: Iterable[bytes]
     ):
+        users_marks2=[]
+        for ids,mark in zip(user_ids,users_marks):
+            if ids!=-1:
+                users_marks2.append(mark)
         self.q.executemany(
             (
                 "INSERT INTO users_lesson(user_id, lesson, marks) VALUES(%s, %s, %s)"
                 "ON DUPLICATE KEY UPDATE marks=VALUES(marks)"
             ),
-            tuple(zip(user_ids, [lesson] * len(user_ids), users_marks)),
+            tuple(zip(user_ids, [lesson] * len(user_ids), users_marks2)),
         )
         self._commit()
     
