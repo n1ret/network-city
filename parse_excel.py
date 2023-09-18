@@ -39,18 +39,20 @@ def parse_table(school_class: str, excel_table: PathLike | bytes, db: DataBase):
             raise ValueError(f"No columns found on sheet {lesson}")
         
         df[0].replace('', nan, inplace=True)
-        if type(df.loc[0,0])!=str:
-            df.pop(df.columns[0])
-        df.loc[df[0].astype(str).str[0].str.islower(),0] = ''
+        if type(df.loc[0][0])!=str:
+            df.drop(0, axis=1,inplace=True)
         df[0].replace('', nan, inplace=True)
         df.dropna(subset=[0], how='all', inplace=True,ignore_index=True)
         df.dropna(axis=1, how='all', inplace=True)
 
         end=-1
         for row in df.index:
-            if df[0][row].lower().strip() in ("тема урока","д\з"):
-                end=row-1
-                break
+            try:
+                if df[0][row].lower().strip() in ("тема урока","д\з",):
+                    end=row-1
+                    break
+            except:
+                raise ValueError(f"Add '{df[0][row]}' to exceptions list. Please, contact @btless")
         if end==-1:
             raise ValueError(f"'Тема урока' not found on sheet {lesson}")
         
@@ -80,7 +82,7 @@ def parse_table(school_class: str, excel_table: PathLike | bytes, db: DataBase):
                 else:
                     if str(mark).isdigit():
                         mark = int(mark)
-                    else:
+                    elif len(str(mark))<=3:
                         mark = str(mark).upper()
 
                 users_marks[i].append(Mark(int(date.timestamp()), mark))
