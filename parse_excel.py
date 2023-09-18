@@ -1,7 +1,7 @@
 from time import time
 from json import dump, load
 from os import PathLike, path
-from numpy import nan
+from numpy import nan,float64
 from datetime import datetime
 import pickle
 
@@ -39,12 +39,16 @@ def parse_table(school_class: str, excel_table: PathLike | bytes, db: DataBase):
             raise ValueError(f"No columns found on sheet {lesson}")
         
         df[0].replace('', nan, inplace=True)
+        if type(df.loc[0,0])!=str:
+            df.pop(df.columns[0])
+        df.loc[df[0][0]==df[0][0].lower(), 0] = ''
+        df[0].replace('', nan, inplace=True)
         df.dropna(subset=[0], how='all', inplace=True,ignore_index=True)
         df.dropna(axis=1, how='all', inplace=True)
 
         end=-1
         for row in df.index:
-            if df[0][row].lower().strip()=="тема урока":
+            if df[0][row].lower().strip() in ("тема урока","д\з"):
                 end=row-1
                 break
         if end==-1:
@@ -66,7 +70,7 @@ def parse_table(school_class: str, excel_table: PathLike | bytes, db: DataBase):
             if date is nan:
                 break
             if not isinstance(date, datetime):
-                raise TypeError(f"First row must contain datetime.datetime, founded: {type(date)} at sheet {lesson}, column {ind}")
+                date=datetime().now().replace(day=date)
             for i, mark in enumerate(column[1:]):
                 if i > len(fullnames)-1: break
                 if mark is nan or mark is None or mark is pd.NaT:
