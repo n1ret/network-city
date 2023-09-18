@@ -39,24 +39,25 @@ def parse_table(school_class: str, excel_table: PathLike | bytes, db: DataBase):
             raise ValueError(f"No columns found on sheet {lesson}")
         
         df[0].replace('', nan, inplace=True)
+        sc=0
         if type(df.loc[0][0])!=str:
-            df.drop(0, axis=1,inplace=True)
-        df[0].replace('', nan, inplace=True)
-        df.dropna(subset=[0], how='all', inplace=True,ignore_index=True)
+            sc=1
+        df[sc].replace('', nan, inplace=True)
+        df.dropna(subset=[sc], how='all', inplace=True,ignore_index=True)
         df.dropna(axis=1, how='all', inplace=True)
 
         end=-1
         for row in df.index:
             try:
-                if df[0][row].lower().strip() in ("тема урока","д\з",):
+                if df[sc][row].lower().strip() in ("тема урока","д\з",):
                     end=row-1
                     break
             except:
-                raise ValueError(f"Add '{df[0][row]}' to exceptions list. Please, contact @btless")
+                raise ValueError(f"Add '{df[sc][row]}' to exceptions list. Please, contact @btless")
         if end==-1:
             raise ValueError(f"'Тема урока' not found on sheet {lesson}")
         
-        fullnames = [''.join([i for i in str(name) if not i.isdigit()]).strip().strip(".").strip() for name in df[0][1:end]]
+        fullnames = [''.join([i for i in str(name) if not i.isdigit()]).strip().strip(".").strip() for name in df[0][sc+1:end]]
         
         if len(fullnames)==0:
             continue
@@ -66,7 +67,7 @@ def parse_table(school_class: str, excel_table: PathLike | bytes, db: DataBase):
             allids.add(usid)
 
         users_marks = [[] for _ in range(len(fullnames))]
-        marks = df.loc[:end, 1:]
+        marks = df.loc[:end, sc+1:]
         for ind, (_, column) in enumerate(marks.items()):
             date = column[0]
             if date is nan:
