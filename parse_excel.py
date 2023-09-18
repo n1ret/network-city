@@ -41,7 +41,7 @@ def parse_table(school_class: str, excel_table: PathLike | bytes, db: DataBase):
         df[0].replace('', nan, inplace=True)
         if type(df.loc[0,0])!=str:
             df.pop(df.columns[0])
-        df.loc[df[0].astype(str).str[0]==df[0].astype(str).str[0].lower(), 0] = ''
+        df.loc[df[0].astype(str).str[0].str.islower(),0] = ''
         df[0].replace('', nan, inplace=True)
         df.dropna(subset=[0], how='all', inplace=True,ignore_index=True)
         df.dropna(axis=1, how='all', inplace=True)
