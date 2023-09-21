@@ -39,21 +39,17 @@ def parse_table(school_class: str, excel_table: PathLike | bytes, db: DataBase):
             raise ValueError(f"No columns found on sheet {lesson}")
         
         df[0].replace('', nan, inplace=True)
-        sc=0
-        if type(df.loc[0][0])!=str:
-            sc=1
-        df[sc].replace('', nan, inplace=True)
         df.dropna(subset=[sc], how='all', inplace=True,ignore_index=True)
         df.dropna(axis=1, how='all', inplace=True)
 
         end=-1
         for row in df.index:
             try:
-                if df[sc][row].lower().strip() in ("тема урока","д\з",):
+                if df[0][row].lower().strip()=="тема урока":
                     end=row-1
                     break
             except:
-                raise ValueError(f"Add '{df[sc][row]}' to exceptions list. Please, contact @btless")
+                continue
         if end==-1:
             raise ValueError(f"'Тема урока' not found on sheet {lesson}")
         
