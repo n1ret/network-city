@@ -69,7 +69,7 @@ def parse_table(school_class: str, excel_table: PathLike | bytes, db: DataBase):
             if date is nan:
                 break
             if not isinstance(date, datetime):
-                date=datetime().today().replace(day=date)
+                date=datetime.today().replace(day=date)
             for i, mark in enumerate(column[1:]):
                 if i > len(fullnames)-1: break
                 if mark is nan or mark is None or mark is pd.NaT:
